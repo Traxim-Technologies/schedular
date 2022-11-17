@@ -21,13 +21,18 @@ export default defineConfig({
     ],
     server: {
         // configure vite for HMR with Gitpod
-        hmr: process.env.VITE_GITPOD_WORKSPACE_URL ? {
+        hmr: process.env.VITE_GITPOD == 'true' ? (process.env.VITE_GITPOD_WORKSPACE_URL ? {
             // removes the protocol and replaces it with the port we're connecting to
-            host: process.env.VITE_GITPOD_WORKSPACE_URL.replace('https://', '5173-'),
-            protocol: 'wss',
+            host: process.env.VITE_GITPOD_WORKSPACE_URL.replace('https://', process.env.VITE_PORT),
+            protocol: process.env.FORCE_SCHEME == 'http' ? 'ws':'wss',
             clientPort: 443
         }
-        : true
+        : true)
+        :({
+            host: process.env.VITE_GITPOD_WORKSPACE_URL,
+            protocol: process.env.FORCE_SCHEME == 'http' ? 'ws':'wss',
+            clientPort: process.env.VITE_PORT
+        })
     },
     ssr: {
         noExternal: ['@inertiajs/server'],
