@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+/* width */
+.time-list-scroller::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+.time-list-scroller::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+
+/* Handle */
+.time-list-scroller::-webkit-scrollbar-thumb {
+    background: #888; 
+}
+
+/* Handle on hover */
+.time-list-scroller::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+}

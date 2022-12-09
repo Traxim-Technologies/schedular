@@ -70,7 +70,7 @@ export default{
             </p>
           </div>
         </div>
-        <div class="flex items-end border-t w-full">
+        <div v-if="toggleSelectedTimeSlot" class="flex items-end border-t w-full">
           <div class="showSelectedSlot px-4 w-full">
             <h2 class="text-2xl font-bold color-black mb-4 mt-5">
               Selected Times
@@ -79,11 +79,11 @@ export default{
               <div class="flex items-center gap-4">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1" stroke="white" class="w-6 h-6 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <div class="">
-                  <h2 class="text-gray-700">{{selectedTime.month}} {{ selectedTime.date}} {{selectedTime.year}}, 1:15:00 am</h2>
+                  <h2 class="text-gray-700">{{selectedTime.month}} {{ selectedTime.date}} {{selectedTime.year}}, {{selectedTime.appointedTime}}</h2>
                   <span class="text-sm text-gray-500  font-medium">Created at : 12-08-2022 22:45:22</span>
                 </div>
               </div>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6 cursor-pointer">
+              <svg @click="deleteTimeSlot(index)" xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6 cursor-pointer">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
               </svg>
             </div>
@@ -91,7 +91,7 @@ export default{
         </div>
       </div>
       <div class="pt-2 border  rounded-md mx-auto w-full flex flex-col lg:w-3/5 pb-30">
-        <div class="px-8">
+        <div class="px-8 mb-24">
           <div class="my-6">
             <h2 class="text-2xl  font-bold color-black mb-4 mt-2"> Select a Date & Time</h2>
           </div>
@@ -123,46 +123,43 @@ export default{
                     <div class="w-2/12 text-center flex justify-center items-center  mb-4"  
                       v-for="date in daysInMonth(currentYear, currentMonthInNumber)"
                       :key="date" ref="date" @click="getDate(date)">
-                      <label class="p-2 text-base font-normal active:bg-indigo-400 active:text-white hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center "> {{ date }}</label>
+                      <label :id="'date-label-' + date + '-' + currentYear" class="p-2 text-base font-normal active:bg-indigo-400 active:text-white hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center relative"> 
+                        {{ date }}
+                        <span :id="'date-count-' + date + '-' + currentYear" class="selected-count absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">1</span>
+                      </label>
                     </div>
                   </div>
                 </section>
               </div>
-              <div class="w-5/12 h-96 overflow-y-auto">
-                <div v-if="timeSlotMain" class="border">
+              <div class="w-5/12">
+                <div v-if="timeSlotMain" class="border w-full">
                   <div class="py-2 px-4 border-b-2 mb-4  border-gray-100">
                     <p class="text-lg font-bold text-center">{{selectedDay}}, {{ currentMonthInName }} {{currentDate}}</p>
                   </div>
-                  <div class="list px-4">
-                    <ul class="list-none p-0  ">
-                      <li  class="mb-3 flex space-x-1"> 
-                        <label @click="toggleSelect" class="transition-all flex justify-center items-center text-md font-semibold cursor-pointer border-2 text-center  py-3 rounded-md ease-in-out duration-700"
-                        :class="[toggleSelectBtn ? 'w-[50%]' : 'w-full', toggleSelectBtn ? 'bg-gray-600 text-white' : 'border-indigo-600'  ]"
-                        >1:00 AM
-                        </label>
-                        <button @click="pushTimeSLot()" v-if="toggleSelectBtn" class="transition-all cursor-pointer border-none text-white text-center bg-blue-600 py-3 rounded-md duration-700 ease-in-out font-semibold"
-                        :class="[toggleSelectBtn?'w-[50%]':'w-0']"
-                        >Select
-                        </button>
-                      </li>
-                      <li class="mb-3 cursor-pointer border-2 text-center border-indigo-600  py-3 rounded-md"> 
-                        <label class="flex justify-center items-center w-full text-md font-semibold cursor-pointer">3:00 AM</label>
-                      </li>
-                      <li class="mb-3 cursor-pointer border-2 text-center border-indigo-600  py-3 rounded-md"> 
-                        <label class="flex justify-center items-center w-full text-md font-semibold cursor-pointer">8:00 AM</label>
-                      </li>
-                      <li class="mb-3 cursor-pointer border-2 text-center border-indigo-600  py-3 rounded-md"> 
-                        <label class="flex justify-center items-center w-full text-md font-semibold cursor-pointer">9:00 AM</label>
-                      </li>
-                    </ul>
+                  <div class="time-list-scroller px-4 w-full overflow-y-scroll overflow-x-hidden md:h-80 h-full flex flex-col items-center">
+                    <div v-if="toggleLimitation" class="w-full">
+                      <ul  class="list-none p-0">
+                        <li  v-for="(time, index) in timeSlotArray" :key="index" class="mb-3 flex space-x-1 "> 
+                          <label :id= "'timeSlotLabel-'+index" :data-index-label = index @click="toggleSelect(index)" class="transition-all flex justify-center items-center text-md font-semibold cursor-pointer border-2 text-center  py-3 rounded-md ease-in-out duration-700 w-full border-indigo-600 timeSlotLabel  hover:border-3 hover:border-black"
+                          >{{time}}
+                          </label>
+                          <button :id= "'timeSlotBtn-'+index" :data-index-Select = index @click="pushTimeSLot(time,index)" class="timeSlotBtn transition-all cursor-pointer border-none text-white text-center bg-blue-600 py-3 rounded-md duration-700 ease-in-out font-semibold w-0"
+                          >Select
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                    <div v-else class="font-semibold text-xs p-2">
+                      You have reached the maximum selected time for the appointment. You can add new time after delete one of the selected ones.
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="flex grow items-end">
-          <div class="flex w-full border-t  justify-end mt-24">
+        <div v-if="toggleConfirmBtn" class="flex grow items-end">
+          <div class="flex w-full border-t  justify-end">
             <button class="justify-self-center m-4 justify-center items-center bg-black hover:bg-gray-900 text-white font-bold py-4 px-6 rounded">Confirm</button>
           </div>
         </div>
@@ -184,8 +181,31 @@ export default {
       toggleSelectBtn:false,
       selectedDay:'',
       timeSlotMain: false,
-      timeSlotArray: new Array(50).fill(0),
-      selectedTimeArray:[{}]
+      timeSlotArray: [
+        '1:00 AM','1:15 AM','1:30 AM','1:45 AM','2:00 AM',
+        '2:15 AM','2:30 AM','2:45 AM','3:00 AM','3:15 AM',
+        '3:30 AM','3:45 AM','4:00 AM','4:15 AM','4:30 AM',
+        '4:45 AM','5:00 AM','5:15 AM','5:30 AM','5:45 AM',
+        '6:00 AM','6:15 AM','6:30 AM','6:45 AM','7:00 AM',
+        '7:15 AM','7:30 AM','7:45 AM','8:00 AM','8:15 AM',
+        '8:30 AM','8:45 AM','9:00 AM','9:15 AM','9:30 AM',
+        '9:45 AM','10:00 AM','10:15 AM','10:30 AM','10:45 AM',
+        '11:00 AM','11:15 AM','11:30 AM','11:45 AM',
+        '12:00 PM','12:15 PM','12:30 PM','12:45 PM',
+        '1:00 PM','1:15 PM','1:30 PM','1:45 PM','2:00 PM',
+        '2:15 PM','2:30 PM','2:45 PM','3:00 PM','3:15 PM',
+        '3:30 PM','3:45 PM','4:00 PM','4:15 PM','4:30 PM',
+        '4:45 PM','5:00 PM','5:15 PM','5:30 PM','5:45 PM',
+        '6:00 PM','6:15 PM','6:30 PM','6:45 PM','7:00 PM',
+        '7:15 PM','7:30 PM','7:45 PM','8:00 PM','8:15 PM',
+        '8:30 PM','8:45 PM','9:00 PM','9:15 PM','9:30 PM',
+        '9:45 PM','10:00 PM','10:15 PM','10:30 PM','10:45 PM',
+        '11:00 PM','11:15 PM','11:30 PM','11:45 PM','12:00 AM',
+      ],
+      selectedTimeArray:[],
+      toggleSelectedTimeSlot:false,
+      toggleConfirmBtn:false,
+      toggleLimitation:true,
     };
   },
   methods: {
@@ -225,15 +245,59 @@ export default {
       return
       // console.log(key,this.$refs.date)
     },
-    toggleSelect(){
-      this.toggleSelectBtn = true;
+    toggleSelect(index){
+      let labelArray = document.getElementsByClassName('timeSlotLabel');
+      let selectBtnArray = document.getElementsByClassName('timeSlotBtn');
+      for (let index = 0; index < selectBtnArray.length; index++) {
+        /*label class toggles*/
+        labelArray[index].classList.add('w-full');
+        labelArray[index].classList.add('border-indigo-600');
+        labelArray[index].classList.remove('bg-gray-600');
+        labelArray[index].classList.remove('text-white');
+        labelArray[index].classList.remove('w-[50%]');
+        /*select class toggles*/
+        selectBtnArray[index].classList.add('w-0');
+        selectBtnArray[index].classList.remove('w-[50%]');
+        if(labelArray[index].classList.contains('selected-time')){
+          labelArray[index].classList.remove('border-indigo-600');
+          labelArray[index].classList.add('border-black');
+        }
+      }
+      let label = document.getElementById('timeSlotLabel-' + index);
+      let selectBtn = document.getElementById('timeSlotBtn-' + index);
+      /*label class toggles*/
+      label.classList.remove('w-full');
+      label.classList.remove('border-indigo-600');
+      label.classList.add('bg-gray-600');
+      label.classList.add('text-white');
+      label.classList.add('w-[50%]');
+      /*select class toggles*/
+      selectBtn.classList.remove('w-0');
+      selectBtn.classList.add('w-[50%]');
     },
-    pushTimeSLot(){
+    pushTimeSLot(time,index){
+      /*Select button disabling*/
+      let selectBtn = document.getElementById('timeSlotBtn-' + index);
+      selectBtn.classList.remove('bg-blue-600');
+      selectBtn.classList.add('bg-black');
+      selectBtn.classList.add('cursor-not-allowed');
+      selectBtn.setAttribute('disabled','disabled');
+      selectBtn.innerText = 'Selected';
+      /*Select button disabling*/
+      
+      /*Select label to make active*/
+      let label = document.getElementById('timeSlotLabel-' + index);
+      label.classList.add('selected-time');
+      /*Select label to make active*/
+
+      this.toggleSelectedTimeSlot = true;
+      this.toggleConfirmBtn = true;
       var newDate = new Date(); 
       let timeSlotobject = {
         month: this.currentMonthInName,
         date: this.currentDate,
         year: this.currentYear,
+        appointedTime: time,
         createdAt: newDate.getDate() + "/"
                 + (newDate.getMonth()+1)  + "/" 
                 + newDate.getFullYear() + " @ "  
@@ -241,8 +305,39 @@ export default {
                 + newDate.getMinutes() + ":" 
                 + newDate.getSeconds(),
       }
-      this.selectedTimeArray.push(timeSlotobject);
+      if(this.selectedTimeArray.length < 3){
+        /*Change selected date style*/
+        let date_label = document.getElementById('date-label-'+this.currentDate+'-'+this.currentYear);
+        date_label.classList.add('bg-blue-600');
+        date_label.classList.add('border-2');
+        date_label.classList.add('border-blue-800');
+        date_label.classList.add('text-white');
+        /*Change selected date style*/
+        
+        /*Show selected date count*/
+        let date_count = document.getElementById('date-count-'+this.currentDate+'-'+this.currentYear);
+        date_count.classList.remove('hidden');
+        date_count.classList.add('flex');
+        /*Show selected date count*/
+
+        this.selectedTimeArray.push(timeSlotobject);
+      }else{
+        this.toggleLimitation = false;
+      }
       console.log(this.selectedTimeArray);
+    },
+    deleteTimeSlot(index){
+      this.selectedTimeArray.forEach((value,key)=>{
+        if(key === index){
+          if(this.selectedTimeArray.length > 1){
+            this.selectedTimeArray.splice(index,1);
+          }
+          else{
+            this.toggleSelectedTimeSlot = false;
+            this.toggleConfirmBtn = false;
+          }
+        }
+      })
     }
   },
   computed:{
@@ -250,23 +345,11 @@ export default {
       return new Date(this.currentYear,this.currentMonthInNumber).toLocaleString("default", {month: "long"})
     },
   },
-  // mounted: function (){
-  //   console.log(this.timeSlotArray,this.days)
-  //   let value = 0;
-  //   let hours = 1;
-  //   let inc = 15;
-  //   this.timeSlotArray.forEach((key,value)=>{
-  //     value = `${hours + ':' + inc}` ;
-  //     console.log(this.timeSlotArray[key])
-  //     this.timeSlotArray[key].push(value);
-  //     inc += inc;
-  //     if(inc == 60){
-  //       hours += 1;
-  //       inc = 0;
-  //     }
-  //   })
-  //   console.log(this.timeSlotArray);
-  // }
+  mounted: function (){
+    let fillTime = new Date();
+    fillTime = fillTime.toLocaleTimeString();
+    console.log(fillTime)
+  }
 };
 </script>
 
