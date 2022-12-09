@@ -122,10 +122,22 @@ export default{
                     <div class="w-2/12 flex justify-center items-center mb-2 " v-for="day in startDay()" :key="day"></div>
                     <div class="w-2/12 text-center flex justify-center items-center  mb-4"  
                       v-for="date in daysInMonth(currentYear, currentMonthInNumber)"
-                      :key="date" ref="date" @click="getDate(date)">
-                      <label :id="'date-label-' + date + '-' + currentYear" class="p-2 text-base font-normal active:bg-indigo-400 active:text-white hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center relative"> 
+                      :key="date" ref="date" @click="getDateManually(date)">
+                      <label 
+                        :class="  date >= new Date().getDate() &&
+                                  currentMonthInNumber == new Date().getMonth() &&
+                                  currentYear >= new Date().getFullYear()
+                                  ? 'text-blue-500' : 'text-gray-400'
+                                " 
+                        :id="'date-label-' + date + '-' + currentMonthInName 
+                        + '-' + currentYear" 
+                        class="p-2 text-base font-normal active:bg-blue-500 active:text-white hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center relative"> 
                         {{ date }}
-                        <span :id="'date-count-' + date + '-' + currentYear" class="selected-count absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">1</span>
+                        <span :class="
+                          date == todaysDate && 
+                          currentMonthInNumber == todaysMonth && 
+                          currentYear == todaysYear?'block':'hidden'" class="absolute z-10 text-4xl font-black -bottom-1">.</span>
+                        <span :id="'date-count-' + date + '-' + currentMonthInName  + '-' + currentYear" class="selected-count absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">1</span>
                       </label>
                     </div>
                   </div>
@@ -136,11 +148,11 @@ export default{
                   <div class="py-2 px-4 border-b-2 mb-4  border-gray-100">
                     <p class="text-lg font-bold text-center">{{selectedDay}}, {{ currentMonthInName }} {{currentDate}}</p>
                   </div>
-                  <div class="time-list-scroller px-4 w-full overflow-y-scroll overflow-x-hidden md:h-80 h-full flex flex-col items-center">
+                  <div class="time-list-scroller px-4 w-full overflow-y-scroll overflow-x-hidden md:h-80 h-full flex flex-col items-center justify-center">
                     <div v-if="toggleLimitation" class="w-full">
                       <ul  class="list-none p-0">
                         <li  v-for="(time, index) in timeSlotArray" :key="index" class="mb-3 flex space-x-1 "> 
-                          <label :id= "'timeSlotLabel-'+index" :data-index-label = index @click="toggleSelect(index)" class="transition-all flex justify-center items-center text-md font-semibold cursor-pointer border-2 text-center  py-3 rounded-md ease-in-out duration-700 w-full border-indigo-600 timeSlotLabel  hover:border-3 hover:border-black"
+                          <label :id= "'timeSlotLabel-'+index" :data-index-label = index @click="toggleSelect(index)" class="transition-all flex justify-center items-center text-md font-semibold cursor-pointer border-2 text-center  py-3 rounded-md ease-in-out duration-700 w-full border-blue-500 timeSlotLabel  hover:border-3 hover:border-black"
                           >{{time}}
                           </label>
                           <button :id= "'timeSlotBtn-'+index" :data-index-Select = index @click="pushTimeSLot(time,index)" class="timeSlotBtn transition-all cursor-pointer border-none text-white text-center bg-blue-600 py-3 rounded-md duration-700 ease-in-out font-semibold w-0"
@@ -149,7 +161,7 @@ export default{
                         </li>
                       </ul>
                     </div>
-                    <div v-else class="font-semibold text-xs p-2">
+                    <div v-if="!toggleLimitation" class="font-semibold text-xs p-2">
                       You have reached the maximum selected time for the appointment. You can add new time after delete one of the selected ones.
                     </div>
                   </div>
@@ -206,6 +218,10 @@ export default {
       toggleSelectedTimeSlot:false,
       toggleConfirmBtn:false,
       toggleLimitation:true,
+      todaysDate:new Date().getDate(),
+      todaysMonth:new Date().getMonth(),
+      todaysYear:new Date().getFullYear(),
+      previousDateElement: [],
     };
   },
   methods: {
@@ -237,7 +253,29 @@ export default {
       this.toggleSelectBtn = false;
       console.log(this.currentMonthInNumber)
     },
-    getDate(date){
+    getDateManually(date){
+      /*Remove previous active dates*/
+      if(this.previousDateElement !== undefined && this.previousDateElement.length > 0){
+          for (let index = 0; index < this.previousDateElement.length; index++) {
+            this.previousDateElement[index].classList.remove('custom-date-style');
+            this.previousDateElement[index].classList.remove('bg-blue-500');
+            this.previousDateElement[index].classList.remove('text-white');
+            this.previousDateElement[index].classList.add('text-blue-500');
+            this.previousDateElement[index].classList.add('hover:bg-slate-200');
+          }
+      }
+      /*Remove previous active dates*/
+
+      /*make active selected date*/
+      let dateElement = document.getElementById('date-label-' + date + '-' + this.currentMonthInName + '-' + this.currentYear);
+      dateElement.classList.remove('text-blue-500');
+      dateElement.classList.remove('hover:bg-slate-200');
+      dateElement.classList.add('custom-date-style');
+      dateElement.classList.add('bg-blue-500');
+      dateElement.classList.add('text-white');
+      this.previousDateElement.push(dateElement);
+      /*make active selected date*/
+
       this.currentDate = date
       var date = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
       this.selectedDay = date.toLocaleDateString('default', { weekday: 'long' });
@@ -251,7 +289,7 @@ export default {
       for (let index = 0; index < selectBtnArray.length; index++) {
         /*label class toggles*/
         labelArray[index].classList.add('w-full');
-        labelArray[index].classList.add('border-indigo-600');
+        labelArray[index].classList.add('border-blue-500');
         labelArray[index].classList.remove('bg-gray-600');
         labelArray[index].classList.remove('text-white');
         labelArray[index].classList.remove('w-[50%]');
@@ -259,7 +297,7 @@ export default {
         selectBtnArray[index].classList.add('w-0');
         selectBtnArray[index].classList.remove('w-[50%]');
         if(labelArray[index].classList.contains('selected-time')){
-          labelArray[index].classList.remove('border-indigo-600');
+          labelArray[index].classList.remove('border-blue-500');
           labelArray[index].classList.add('border-black');
         }
       }
@@ -267,7 +305,7 @@ export default {
       let selectBtn = document.getElementById('timeSlotBtn-' + index);
       /*label class toggles*/
       label.classList.remove('w-full');
-      label.classList.remove('border-indigo-600');
+      label.classList.remove('border-blue-500');
       label.classList.add('bg-gray-600');
       label.classList.add('text-white');
       label.classList.add('w-[50%]');
@@ -307,30 +345,38 @@ export default {
       }
       if(this.selectedTimeArray.length < 3){
         /*Change selected date style*/
-        let date_label = document.getElementById('date-label-'+this.currentDate+'-'+this.currentYear);
+        let date_label = document.getElementById('date-label-'+this.currentDate+'-'+this.currentMonthInName+'-'+this.currentYear);
+        console.log(date_label)
         date_label.classList.add('bg-blue-600');
         date_label.classList.add('border-2');
         date_label.classList.add('border-blue-800');
         date_label.classList.add('text-white');
+        date_label.classList.remove('hover:bg-slate-200');
         /*Change selected date style*/
         
         /*Show selected date count*/
-        let date_count = document.getElementById('date-count-'+this.currentDate+'-'+this.currentYear);
+        let date_count = document.getElementById('date-count-'+this.currentDate+'-'+this.currentMonthInName+'-'+this.currentYear);
         date_count.classList.remove('hidden');
         date_count.classList.add('flex');
         /*Show selected date count*/
 
         this.selectedTimeArray.push(timeSlotobject);
-      }else{
-        this.toggleLimitation = false;
+
+        if(this.selectedTimeArray.length === 3){
+          this.toggleLimitation = false;
+        }
       }
-      console.log(this.selectedTimeArray);
     },
     deleteTimeSlot(index){
       this.selectedTimeArray.forEach((value,key)=>{
         if(key === index){
           if(this.selectedTimeArray.length > 1){
             this.selectedTimeArray.splice(index,1);
+            if(this.selectedTimeArray.length < 3){
+              this.toggleLimitation = true;
+            }
+            // date-label-10-December-2022
+            // let data_label
           }
           else{
             this.toggleSelectedTimeSlot = false;
@@ -348,7 +394,7 @@ export default {
   mounted: function (){
     let fillTime = new Date();
     fillTime = fillTime.toLocaleTimeString();
-    console.log(fillTime)
+    // console.log(fillTime)
   }
 };
 </script>
