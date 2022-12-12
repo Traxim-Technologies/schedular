@@ -123,12 +123,15 @@ export default{
                     <div class="w-2/12 text-center flex justify-center items-center  mb-4"  
                       v-for="date in daysInMonth(currentYear, currentMonthInNumber)"
                       :key="date" ref="date" @click="getDateManually(date)">
-                      <label 
-                        :class="  date >= new Date().getDate() &&
-                                  currentMonthInNumber == new Date().getMonth() &&
-                                  currentYear >= new Date().getFullYear()
-                                  ? 'text-blue-500' : 'text-gray-400'
+                      <button 
+                        :class="{
+                                  'text-white bg-blue-500': ((today.getDate() === date) && (today.getMonth() === currentMonthInNumber) && (today.getFullYear() === currentYear)),
+                                  'past text-gray-400': (is_past(today,currentYear,currentMonthInNumber,date,this)? true: false),
+                                  'text-black': is_firstOrLastDay(date) ? true : false,
+                                  'text-blue-500 font-black': is_firstOrLastDay(date) ? false : true,
+                                }
                                 " 
+                        :disabled="(today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf() || is_firstOrLastDay(date) ? true : false)"
                         :id="'date-label-' + date + '-' + currentMonthInName 
                         + '-' + currentYear" 
                         class="p-2 text-base font-normal active:bg-blue-500 active:text-white hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center relative"> 
@@ -138,7 +141,7 @@ export default{
                           currentMonthInNumber == todaysMonth && 
                           currentYear == todaysYear?'block':'hidden'" class="absolute z-10 text-4xl font-black -bottom-1">.</span>
                         <span :id="'date-count-' + date + '-' + currentMonthInName  + '-' + currentYear" class="selected-count absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">1</span>
-                      </label>
+                      </button>
                     </div>
                   </div>
                 </section>
@@ -222,6 +225,8 @@ export default {
       todaysMonth:new Date().getMonth(),
       todaysYear:new Date().getFullYear(),
       previousDateElement: [],
+      today:new Date(),
+      disablingDate:'',
     };
   },
   methods: {
@@ -251,36 +256,36 @@ export default {
       }
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
-      console.log(this.currentMonthInNumber)
+      console.log(this.currentMonthInNumber);
     },
     getDateManually(date){
-      /*Remove previous active dates*/
-      if(this.previousDateElement !== undefined && this.previousDateElement.length > 0){
-          for (let index = 0; index < this.previousDateElement.length; index++) {
-            this.previousDateElement[index].classList.remove('custom-date-style');
-            this.previousDateElement[index].classList.remove('bg-blue-500');
-            this.previousDateElement[index].classList.remove('text-white');
-            this.previousDateElement[index].classList.add('text-blue-500');
-            this.previousDateElement[index].classList.add('hover:bg-slate-200');
-          }
-      }
-      /*Remove previous active dates*/
-
-      /*make active selected date*/
-      let dateElement = document.getElementById('date-label-' + date + '-' + this.currentMonthInName + '-' + this.currentYear);
-      dateElement.classList.remove('text-blue-500');
-      dateElement.classList.remove('hover:bg-slate-200');
-      dateElement.classList.add('custom-date-style');
-      dateElement.classList.add('bg-blue-500');
-      dateElement.classList.add('text-white');
-      this.previousDateElement.push(dateElement);
-      /*make active selected date*/
-
-      this.currentDate = date
-      var date = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
-      this.selectedDay = date.toLocaleDateString('default', { weekday: 'long' });
-      this.timeSlotMain = true;
-      return
+        /*Remove previous active dates*/
+        if(this.previousDateElement !== undefined && this.previousDateElement.length > 0){
+            for (let index = 0; index < this.previousDateElement.length; index++) {
+              this.previousDateElement[index].classList.remove('custom-date-style');
+              this.previousDateElement[index].classList.remove('bg-blue-500');
+              this.previousDateElement[index].classList.remove('text-white');
+              this.previousDateElement[index].classList.add('text-blue-500');
+              this.previousDateElement[index].classList.add('hover:bg-slate-200');
+            }
+        }
+        /*Remove previous active dates*/
+  
+        /*make active selected date*/
+        let dateElement = document.getElementById('date-label-' + date + '-' + this.currentMonthInName + '-' + this.currentYear);
+        dateElement.classList.remove('text-blue-500');
+        dateElement.classList.remove('hover:bg-slate-200');
+        dateElement.classList.add('custom-date-style');
+        dateElement.classList.add('bg-blue-500');
+        dateElement.classList.add('text-white');
+        this.previousDateElement.push(dateElement);
+        /*make active selected date*/
+  
+        this.currentDate = date
+        var date = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
+        this.selectedDay = date.toLocaleDateString('default', { weekday: 'long' });
+        this.timeSlotMain = true;
+        return
       // console.log(key,this.$refs.date)
     },
     toggleSelect(index){
@@ -384,6 +389,26 @@ export default {
           }
         }
       })
+    },
+    is_past(today, currentYear, currentMonthInNumber, date){
+      if(today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf()){
+        return true;
+      }
+    },
+    is_firstOrLastDay(date){
+      var satOrSun = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
+      const checkDay  = satOrSun.toLocaleDateString('default', { weekday: 'long' });
+      if(checkDay === 'Sunday' || checkDay === 'Saturday'){
+        return true;
+      }
+    },
+    disableButton(){
+      let allPastDates = document.querySelectorAll('.past');
+      for (let index = 0; index < allPastDates.length; index++) {
+        if(allPastDates[index].classList.contains('past')){
+          allPastDates[index].setAttribute('disabled','disabled') 
+        }
+      }
     }
   },
   computed:{
@@ -391,11 +416,6 @@ export default {
       return new Date(this.currentYear,this.currentMonthInNumber).toLocaleString("default", {month: "long"})
     },
   },
-  mounted: function (){
-    let fillTime = new Date();
-    fillTime = fillTime.toLocaleTimeString();
-    // console.log(fillTime)
-  }
 };
 </script>
 
