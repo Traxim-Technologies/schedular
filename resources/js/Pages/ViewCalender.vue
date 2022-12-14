@@ -120,7 +120,7 @@ export default{
                   </div>
                   <div class="date flex flex-wrap ">
                     <div class="w-2/12 flex justify-center items-center mb-2 " v-for="day in startDay()" :key="day"></div>
-                    <div class="w-2/12 text-center flex justify-center items-center  mb-4"  
+                    <div class="w-2/12 text-center flex justify-center items-center  mb-4 relative"  
                       v-for="date in daysInMonth(currentYear, currentMonthInNumber)"
                       :key="date" ref="date" @click="getDateManually(date)">
                       <button 
@@ -128,20 +128,26 @@ export default{
                                   'text-white bg-blue-500': ((today.getDate() === date) && (today.getMonth() === currentMonthInNumber) && (today.getFullYear() === currentYear)),
                                   'past text-gray-400': (is_past(today,currentYear,currentMonthInNumber,date,this)? true: false),
                                   'text-black': is_firstOrLastDay(date) ? true : false,
-                                  'text-blue-500 font-black': is_firstOrLastDay(date) ? false : true,
+                                  'text-blue-500 font-black': is_otherDays(today,currentYear,currentMonthInNumber,date) ? true : false,
                                 }
                                 " 
                         :disabled="(today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf() || is_firstOrLastDay(date) ? true : false)"
                         :id="'date-label-' + date + '-' + currentMonthInName 
-                        + '-' + currentYear" 
-                        class="p-2 text-base font-normal active:bg-blue-500 active:text-white hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center relative"> 
+                        + '-' + currentYear + '-' + new Date(currentYear, currentMonthInNumber, date).toLocaleDateString('default', {weekday: 'long'})" 
+                        class="p-2 text-base font-normal active:bg-blue-500 active:text-white hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center"> 
                         {{ date }}
-                        <span :class="
-                          date == todaysDate && 
-                          currentMonthInNumber == todaysMonth && 
-                          currentYear == todaysYear?'block':'hidden'" class="absolute z-10 text-4xl font-black -bottom-1">.</span>
-                        <span :id="'date-count-' + date + '-' + currentMonthInName  + '-' + currentYear" class="selected-count absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">1</span>
+                        <span 
+                        :id="date + '/' + currentMonthInName + '/' + currentYear" 
+                        :class="
+                        date == todaysDate && 
+                        currentMonthInNumber == todaysMonth && 
+                        currentYear == todaysYear?'block':'hidden'" 
+                        class="absolute z-10 text-4xl font-black bottom-2 h-1 w-1 bg-blue-500 rounded-full"></span>
                       </button>
+                      <span 
+                        :id="'date-count-' + date + '-' + currentMonthInName 
+                        + '-' + currentYear + '-' + new Date(currentYear, currentMonthInNumber, date).toLocaleDateString('default',{weekday: 'long'})" 
+                        class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">1</span>
                     </div>
                   </div>
                 </section>
@@ -151,7 +157,7 @@ export default{
                   <div class="py-2 px-4 border-b-2 mb-4  border-gray-100">
                     <p class="text-lg font-bold text-center">{{selectedDay}}, {{ currentMonthInName }} {{currentDate}}</p>
                   </div>
-                  <div class="time-list-scroller px-4 w-full overflow-y-scroll overflow-x-hidden md:h-80 h-full flex flex-col items-center justify-center">
+                  <div class="time-list-scroller px-4 w-full overflow-y-scroll overflow-x-hidden md:h-80 h-full">
                     <div v-if="toggleLimitation" class="w-full">
                       <ul  class="list-none p-0">
                         <li  v-for="(time, index) in timeSlotArray" :key="index" class="mb-3 flex space-x-1 "> 
@@ -227,6 +233,7 @@ export default {
       previousDateElement: [],
       today:new Date(),
       disablingDate:'',
+      storeCountId:[]
     };
   },
   methods: {
@@ -245,6 +252,14 @@ export default {
       }
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
+
+      /*selected count*/
+      for (let index = 0; index < this.storeCountId.length; index++) {
+        if(this.storeCountId[index].classList.contains('selected-count')){
+          this.storeCountId[index].classList.remove('selected-count');
+          this.storeCountId[index].classList.add('hidden')
+        }        
+      }
     },
     prev() {
       if(this.currentMonthInNumber===0){
@@ -257,28 +272,41 @@ export default {
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
       console.log(this.currentMonthInNumber);
+
+      /*selected count*/
+      for (let index = 0; index < this.storeCountId.length; index++) {
+        if(this.storeCountId[index].classList.contains('selected-count')){
+          this.storeCountId[index].classList.remove('selected-count');
+          this.storeCountId[index].classList.add('hidden')
+        }        
+      }
     },
     getDateManually(date){
         /*Remove previous active dates*/
         if(this.previousDateElement !== undefined && this.previousDateElement.length > 0){
-            for (let index = 0; index < this.previousDateElement.length; index++) {
-              this.previousDateElement[index].classList.remove('custom-date-style');
-              this.previousDateElement[index].classList.remove('bg-blue-500');
-              this.previousDateElement[index].classList.remove('text-white');
-              this.previousDateElement[index].classList.add('text-blue-500');
-              this.previousDateElement[index].classList.add('hover:bg-slate-200');
-            }
+          for (let index = 0; index < this.previousDateElement.length; index++) {
+            this.previousDateElement[index].dateElement.classList.remove('custom-date-style');
+            this.previousDateElement[index].dateElement.classList.remove('bg-blue-500');
+            this.previousDateElement[index].dateElement.classList.remove('text-white');
+            this.previousDateElement[index].dateElement.classList.add('text-blue-500');
+            this.previousDateElement[index].dateElement.classList.add('hover:bg-slate-200');
+            this.previousDateElement[index].dateElement.classList.add('bg-slate-100');
+          }
+          this.previousDateElement = [];
         }
         /*Remove previous active dates*/
   
         /*make active selected date*/
-        let dateElement = document.getElementById('date-label-' + date + '-' + this.currentMonthInName + '-' + this.currentYear);
+        let dayName = new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString('default',{weekday: 'long'});
+        let id = 'date-label-' + date + '-' + this.currentMonthInName + '-' + this.currentYear + '-' + dayName;
+        let dateElement = document.getElementById(id);
         dateElement.classList.remove('text-blue-500');
+        dateElement.classList.remove('bg-slate-100');
         dateElement.classList.remove('hover:bg-slate-200');
         dateElement.classList.add('custom-date-style');
         dateElement.classList.add('bg-blue-500');
         dateElement.classList.add('text-white');
-        this.previousDateElement.push(dateElement);
+        this.previousDateElement.push({dayName,dateElement});
         /*make active selected date*/
   
         this.currentDate = date
@@ -350,8 +378,9 @@ export default {
       }
       if(this.selectedTimeArray.length < 3){
         /*Change selected date style*/
-        let date_label = document.getElementById('date-label-'+this.currentDate+'-'+this.currentMonthInName+'-'+this.currentYear);
-        console.log(date_label)
+        let parentLabelId = 'date-label-' + this.currentDate + '-' + this.currentMonthInName + '-' + this.currentYear + '-' + new Date(this.currentYear, this.currentMonthInNumber, this.currentDate).toLocaleDateString('default',{weekday: 'long'})
+        let date_label = document.getElementById(parentLabelId);
+        date_label.setAttribute('selected-date','selected');
         date_label.classList.add('bg-blue-600');
         date_label.classList.add('border-2');
         date_label.classList.add('border-blue-800');
@@ -360,9 +389,12 @@ export default {
         /*Change selected date style*/
         
         /*Show selected date count*/
-        let date_count = document.getElementById('date-count-'+this.currentDate+'-'+this.currentMonthInName+'-'+this.currentYear);
+        let date_count = date_label.nextElementSibling;
         date_count.classList.remove('hidden');
         date_count.classList.add('flex');
+        date_count.classList.add('selected-count');
+        this.storeCountId.push(date_count);
+        // date_count.setAttribute('selected-date-count',date_count.id);
         /*Show selected date count*/
 
         this.selectedTimeArray.push(timeSlotobject);
@@ -400,6 +432,19 @@ export default {
       const checkDay  = satOrSun.toLocaleDateString('default', { weekday: 'long' });
       if(checkDay === 'Sunday' || checkDay === 'Saturday'){
         return true;
+      }
+    },
+    is_otherDays(today, currentYear, currentMonthInNumber, date){
+      if(today.valueOf() <= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf()){
+        var otherDays = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
+        const checkDay  = otherDays.toLocaleDateString('default', { weekday: 'long' });
+        if(
+          checkDay === 'Monday' || checkDay === 'Tuesday' ||
+          checkDay === 'Wednesday' || checkDay === 'Thursday' ||
+          checkDay === 'Friday'
+        ){
+          return true;
+        }
       }
     },
     disableButton(){
