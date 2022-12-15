@@ -137,17 +137,16 @@ export default{
                         class="p-2 text-base font-normal active:bg-blue-500 active:text-white hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center"> 
                         {{ date }}
                         <span 
-                        :id="date + '/' + currentMonthInName + '/' + currentYear" 
                         :class="
                         date == todaysDate && 
                         currentMonthInNumber == todaysMonth && 
                         currentYear == todaysYear?'block':'hidden'" 
                         class="absolute z-10 text-4xl font-black bottom-2 h-1 w-1 bg-blue-500 rounded-full"></span>
                       </button>
-                      <span 
+                      <!-- <span 
                         :id="'date-count-' + date + '-' + currentMonthInName 
                         + '-' + currentYear + '-' + new Date(currentYear, currentMonthInNumber, date).toLocaleDateString('default',{weekday: 'long'})" 
-                        class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">1</span>
+                        class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">1</span> -->
                     </div>
                   </div>
                 </section>
@@ -170,7 +169,7 @@ export default{
                         </li>
                       </ul>
                     </div>
-                    <div v-if="!toggleLimitation" class="font-semibold text-xs p-2">
+                    <div v-if="!toggleLimitation" class="font-semibold text-xs p-2 flex flex-grow h-full items-center">
                       You have reached the maximum selected time for the appointment. You can add new time after delete one of the selected ones.
                     </div>
                   </div>
@@ -232,8 +231,8 @@ export default {
       todaysYear:new Date().getFullYear(),
       previousDateElement: [],
       today:new Date(),
-      disablingDate:'',
-      storeCountId:[]
+      selectDateCount:1,
+      prevDateElementId:'',
     };
   },
   methods: {
@@ -254,11 +253,15 @@ export default {
       this.toggleSelectBtn = false;
 
       /*selected count*/
-      for (let index = 0; index < this.storeCountId.length; index++) {
-        if(this.storeCountId[index].classList.contains('selected-count')){
-          this.storeCountId[index].classList.remove('selected-count');
-          this.storeCountId[index].classList.add('hidden')
-        }        
+      let elements = document.querySelectorAll('.selected-date-count');
+      for (let index = 0; index < elements.length; index++) {
+        if(elements[index].id === this.prevDateElementId){
+          elements[index].classList.add('flex');
+        }
+        else{
+          elements[index].classList.remove('flex');
+          elements[index].classList.add('hidden');
+        }
       }
     },
     prev() {
@@ -271,26 +274,20 @@ export default {
       }
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
-      console.log(this.currentMonthInNumber);
-
-      /*selected count*/
-      for (let index = 0; index < this.storeCountId.length; index++) {
-        if(this.storeCountId[index].classList.contains('selected-count')){
-          this.storeCountId[index].classList.remove('selected-count');
-          this.storeCountId[index].classList.add('hidden')
-        }        
-      }
+      // console.log(this.currentMonthInNumber);
     },
     getDateManually(date){
         /*Remove previous active dates*/
         if(this.previousDateElement !== undefined && this.previousDateElement.length > 0){
           for (let index = 0; index < this.previousDateElement.length; index++) {
-            this.previousDateElement[index].dateElement.classList.remove('custom-date-style');
-            this.previousDateElement[index].dateElement.classList.remove('bg-blue-500');
-            this.previousDateElement[index].dateElement.classList.remove('text-white');
-            this.previousDateElement[index].dateElement.classList.add('text-blue-500');
-            this.previousDateElement[index].dateElement.classList.add('hover:bg-slate-200');
-            this.previousDateElement[index].dateElement.classList.add('bg-slate-100');
+            if(!this.previousDateElement[index].dateElement.hasAttribute('selected-date')){
+              this.previousDateElement[index].dateElement.classList.remove('custom-date-style');
+              this.previousDateElement[index].dateElement.classList.remove('bg-blue-500');
+              this.previousDateElement[index].dateElement.classList.remove('text-white');
+              this.previousDateElement[index].dateElement.classList.add('text-blue-500');
+              this.previousDateElement[index].dateElement.classList.add('hover:bg-slate-200');
+              this.previousDateElement[index].dateElement.classList.add('bg-slate-100');
+            }
           }
           this.previousDateElement = [];
         }
@@ -378,7 +375,7 @@ export default {
       }
       if(this.selectedTimeArray.length < 3){
         /*Change selected date style*/
-        let parentLabelId = 'date-label-' + this.currentDate + '-' + this.currentMonthInName + '-' + this.currentYear + '-' + new Date(this.currentYear, this.currentMonthInNumber, this.currentDate).toLocaleDateString('default',{weekday: 'long'})
+        let parentLabelId = 'date-label-' + this.currentDate + '-' + this.currentMonthInName + '-' + this.currentYear + '-' + new Date(this.currentYear, this.currentMonthInNumber, this.currentDate).toLocaleDateString('default',{weekday: 'long'});
         let date_label = document.getElementById(parentLabelId);
         date_label.setAttribute('selected-date','selected');
         date_label.classList.add('bg-blue-600');
@@ -389,12 +386,15 @@ export default {
         /*Change selected date style*/
         
         /*Show selected date count*/
-        let date_count = date_label.nextElementSibling;
-        date_count.classList.remove('hidden');
-        date_count.classList.add('flex');
-        date_count.classList.add('selected-count');
-        this.storeCountId.push(date_count);
-        // date_count.setAttribute('selected-date-count',date_count.id);
+        if(this.prevDateElementId === parentLabelId){
+          this.selectDateCount++;
+        }else{
+          this.selectDateCount = 1;
+        }
+        date_label.innerHTML += `<span 
+                        class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 flex selected-date-count"
+                        id = ${parentLabelId}
+                        >${this.selectDateCount}</span>`
         /*Show selected date count*/
 
         this.selectedTimeArray.push(timeSlotobject);
@@ -402,6 +402,8 @@ export default {
         if(this.selectedTimeArray.length === 3){
           this.toggleLimitation = false;
         }
+
+        this.prevDateElementId = parentLabelId;
       }
     },
     deleteTimeSlot(index){
@@ -412,8 +414,6 @@ export default {
             if(this.selectedTimeArray.length < 3){
               this.toggleLimitation = true;
             }
-            // date-label-10-December-2022
-            // let data_label
           }
           else{
             this.toggleSelectedTimeSlot = false;
