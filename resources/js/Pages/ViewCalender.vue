@@ -142,11 +142,11 @@ export default{
                         currentMonthInNumber == todaysMonth && 
                         currentYear == todaysYear?'block':'hidden'" 
                         class="absolute z-10 text-4xl font-black bottom-2 h-1 w-1 bg-blue-500 rounded-full"></span>
+                        <span 
+                          :id="'date-count-' + date + '-' + currentMonthInName 
+                          + '-' + currentYear + '-' + new Date(currentYear, currentMonthInNumber, date).toLocaleDateString('default',{weekday: 'long'})" 
+                          class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">{{this.selectDateCount}}</span>
                       </button>
-                      <!-- <span 
-                        :id="'date-count-' + date + '-' + currentMonthInName 
-                        + '-' + currentYear + '-' + new Date(currentYear, currentMonthInNumber, date).toLocaleDateString('default',{weekday: 'long'})" 
-                        class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">1</span> -->
                     </div>
                   </div>
                 </section>
@@ -263,6 +263,14 @@ export default {
           elements[index].classList.add('hidden');
         }
       }
+      /*selected count end*/
+
+      /*selected date style*/
+      let btn = document.querySelector('[selected-date]');
+      console.log(btn.classList)
+      btn.classList.add('border-2')
+      btn.classList.add('border-blue-800');
+      /*selected date style end*/
     },
     prev() {
       if(this.currentMonthInNumber===0){
@@ -366,6 +374,7 @@ export default {
         date: this.currentDate,
         year: this.currentYear,
         appointedTime: time,
+        dayName:new Date(this.currentYear, this.currentMonthInNumber, this.currentDate).toLocaleDateString('default',{weekday: 'long'}),
         createdAt: newDate.getDate() + "/"
                 + (newDate.getMonth()+1)  + "/" 
                 + newDate.getFullYear() + " @ "  
@@ -391,10 +400,12 @@ export default {
         }else{
           this.selectDateCount = 1;
         }
-        date_label.innerHTML += `<span 
-                        class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 flex selected-date-count"
-                        id = ${parentLabelId}
-                        >${this.selectDateCount}</span>`
+        // date_label.innerHTML += `<span 
+        //                 class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 flex selected-date-count"
+        //                 id = ${parentLabelId}
+        //                 >${this.selectDateCount}</span>`
+        date_label.childNodes[2].classList.remove('hidden');
+        date_label.childNodes[2].classList.add('flex');
         /*Show selected date count*/
 
         this.selectedTimeArray.push(timeSlotobject);
@@ -409,10 +420,30 @@ export default {
     deleteTimeSlot(index){
       this.selectedTimeArray.forEach((value,key)=>{
         if(key === index){
-          if(this.selectedTimeArray.length > 1){
+          let id  = 'date-label-'+value.date+'-'+value.month+'-'+value.year+'-'+value.dayName;
+          let element = document.getElementById(id);
+          if(this.selectDateCount === 1){
+            this.selectDateCount = 1;
+            element.childNodes[2].remove();
+            element.classList.remove('border-2');
+            element.classList.remove('border-blue-800');
+            element.classList.remove('bg-blue-600');
+            element.classList.remove('bg-blue-500');
+            element.classList.remove('text-white');
+            element.classList.add('bg-slate-100');
+            element.classList.add('text-blue-500');
+          }
+          else if(this.selectDateCount === 2 || this.selectDateCount === 3){
+            this.selectDateCount --;
+          }
+          if(this.selectedTimeArray.length >= 1){
             this.selectedTimeArray.splice(index,1);
             if(this.selectedTimeArray.length < 3){
               this.toggleLimitation = true;
+            }
+            if(this.selectedTimeArray.length === 0 ){
+              this.toggleSelectedTimeSlot = false;
+              this.toggleConfirmBtn = false;
             }
           }
           else{
