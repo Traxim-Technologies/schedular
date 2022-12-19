@@ -450,6 +450,29 @@ export default {
             this.toggleSelectedTimeSlot = false;
             this.toggleConfirmBtn = false;
           }
+
+          /*find ele*/
+          let selectedTimeElements = document.querySelectorAll('.selected-time');
+          for (let index = 0; index < selectedTimeElements.length; index++) {
+            if(value.appointedTime === selectedTimeElements[index].innerText){
+              /*selected time label class toggles*/
+              selectedTimeElements[index].classList.add('w-full');
+              selectedTimeElements[index].classList.add('border-blue-500');
+              selectedTimeElements[index].classList.remove('bg-gray-600');
+              selectedTimeElements[index].classList.remove('text-white');
+              selectedTimeElements[index].classList.remove('w-[50%]');
+              selectedTimeElements[index].classList.remove('border-black');
+              selectedTimeElements[index].classList.remove('selected-time')
+
+              /*selecteted time label (select) button class toggles*/
+              selectedTimeElements[index].nextElementSibling.classList.add('w-0');
+              selectedTimeElements[index].nextElementSibling.classList.add('bg-blue-600');
+              selectedTimeElements[index].nextElementSibling.classList.remove('w-[50%]');
+              selectedTimeElements[index].nextElementSibling.classList.remove('bg-black');
+              selectedTimeElements[index].nextElementSibling.classList.remove('cursor-not-allowed');
+              selectedTimeElements[index].nextElementSibling.removeAttribute('disabled');
+            }
+          } 
         }
       })
     },
