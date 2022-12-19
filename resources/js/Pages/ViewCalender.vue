@@ -83,14 +83,14 @@ export default{
                   <span class="text-sm text-gray-500  font-medium">Created at : 12-08-2022 22:45:22</span>
                 </div>
               </div>
-              <svg @click="deleteTimeSlot(index)" xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6 cursor-pointer">
+              <svg v-if="hideAfterTimeSelect" @click="deleteTimeSlot(index)" xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6 cursor-pointer">
               <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
               </svg>
             </div>
           </div>
         </div>
       </div>
-      <div class="pt-2 border  rounded-md mx-auto w-full flex flex-col lg:w-3/5 pb-30">
+      <div v-if="hideAfterTimeSelect" class="pt-2 border  rounded-md mx-auto w-full flex flex-col lg:w-3/5 pb-30">
         <div class="px-8 mb-24">
           <div class="my-6">
             <h2 class="text-2xl  font-bold color-black mb-4 mt-2"> Select a Date & Time</h2>
@@ -180,12 +180,23 @@ export default{
         </div>
         <div v-if="toggleConfirmBtn" class="flex grow items-end">
           <div class="flex w-full border-t  justify-end">
-            <button class="justify-self-center m-4 justify-center items-center bg-black hover:bg-gray-900 text-white font-bold py-4 px-6 rounded">Confirm</button>
+            <button @click="confirmPopup = true" class="justify-self-center m-4 justify-center items-center bg-black hover:bg-gray-900 text-white font-bold py-4 px-6 rounded">Confirm</button>
           </div>
         </div>
       </div>
     </div>
     
+  </div>
+
+  <div  v-if="confirmPopup" class="h-full w-full flex items-center justify-center">
+    <div @click="confirmPopup = false" class="bg-black bg-opacity-75 h-full w-full absolute inset-0"></div>
+    <div class="max-w-[400px] h-fit m-auto flex items-center justify-center absolute inset-0">
+      <div class="bg-white w-full p-4 rounded-lg text-center">
+        <p class="mb-4 font-bold text-gray-700">Are you sure about the suggested times for this patient? You cannot change it again.</p>
+        <button @click="hideAfterTimeSelect = false,confirmPopup= false" class="bg-black px-4 py-2 text-white text-sm mr-4 rounded-md">Yes Confirm</button>
+        <button @click="confirmPopup= false" class="bg-gray-400 px-4 py-2 text-white text-sm rounded-md">Cancel</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -201,6 +212,8 @@ export default {
       toggleSelectBtn:false,
       selectedDay:'',
       timeSlotMain: false,
+      confirmPopup:false,
+      hideAfterTimeSelect:true,
       timeSlotArray: [
         '1:00 AM','1:15 AM','1:30 AM','1:45 AM','2:00 AM',
         '2:15 AM','2:30 AM','2:45 AM','3:00 AM','3:15 AM',
