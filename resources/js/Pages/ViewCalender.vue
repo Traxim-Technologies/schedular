@@ -400,10 +400,6 @@ export default {
         }else{
           this.selectDateCount = 1;
         }
-        // date_label.innerHTML += `<span 
-        //                 class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 flex selected-date-count"
-        //                 id = ${parentLabelId}
-        //                 >${this.selectDateCount}</span>`
         date_label.childNodes[2].classList.remove('hidden');
         date_label.childNodes[2].classList.add('flex');
         /*Show selected date count*/
@@ -423,8 +419,9 @@ export default {
           let id  = 'date-label-'+value.date+'-'+value.month+'-'+value.year+'-'+value.dayName;
           let element = document.getElementById(id);
           if(this.selectDateCount === 1){
-            this.selectDateCount = 1;
-            element.childNodes[2].remove();
+            // this.selectDateCount --;
+            element.childNodes[2].classList.remove('flex');
+            element.childNodes[2].classList.add('hidden');
             element.classList.remove('border-2');
             element.classList.remove('border-blue-800');
             element.classList.remove('bg-blue-600');
