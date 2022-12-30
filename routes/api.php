@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
@@ -24,19 +25,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/', function () {
     return response()->json([
         "development" => true,
-    ]);
-});
-
-Route::get('/appointment/request', function () {
-    return response()->json([
-        "status" => 200,
-        "executed" => "APPOINTMENT_REQUESTED",
-        "message" => "The appointment has been requested",
-        "instance" => [
-            "uuid" => Str::uuid(),
-            "status" => "APPOINTMENT_REQUESTED",
-            "created_at" => now(),
-            "updated_at" => now(),
+        "routes" => [
+            [
+                "method" => "post",
+                "route" => "/appointment/request",
+                "description" => "Create an appointment instance."
+            ]
         ]
     ]);
 });
+
+Route::post('/appointment/request', [AppointmentController::class,'store']);
