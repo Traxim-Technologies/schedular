@@ -35,3 +35,10 @@ Route::middleware([
         return Inertia::render('Dashboard');
     })->name('dashboard');
 });
+
+
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/schedular', function () {
+        return Inertia::render('ViewCalender');
+    })->name('schedular');
+});
