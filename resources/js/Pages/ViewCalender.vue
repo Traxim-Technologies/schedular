@@ -125,26 +125,24 @@ export default{
                       :key="date" ref="date" @click="getDateManually(date)">
                       <button 
                         :class="{
-                                  'text-white bg-blue-500': ((today.getDate() === date) && (today.getMonth() === currentMonthInNumber) && (today.getFullYear() === currentYear)),
+                                  'todays-date-style relative': ((today.getDate() === date) && (today.getMonth() === currentMonthInNumber) && (today.getFullYear() === currentYear)),
                                   'past text-gray-400': (is_past(today,currentYear,currentMonthInNumber,date,this)? true: false),
                                   'text-black': is_firstOrLastDay(date) ? true : false,
                                   'text-blue-500 font-black': is_otherDays(today,currentYear,currentMonthInNumber,date) ? true : false,
                                 }
                                 " 
                         :disabled="(today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf() || is_firstOrLastDay(date) ? true : false)"
-                        :id="'date-label-' + date + '-' + currentMonthInName 
-                        + '-' + currentYear + '-' + new Date(currentYear, currentMonthInNumber, date).toLocaleDateString('default', {weekday: 'long'})" 
-                        class="p-2 text-base font-normal active:bg-blue-500 active:text-white hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center"> 
+                        :id="'date-label-' + date + '-' + currentMonthInName + '-' + currentYear" 
+                        class="p-2 text-base hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center"> 
                         {{ date }}
                         <span 
                         :class="
                         date == todaysDate && 
                         currentMonthInNumber == todaysMonth && 
-                        currentYear == todaysYear?'block':'hidden'" 
-                        class="absolute z-10 text-4xl font-black bottom-2 h-1 w-1 bg-blue-500 rounded-full"></span>
+                        currentYear == todaysYear?'block custom-dot-index':'hidden'" 
+                        class="absolute text-4xl font-black h-full w-full bg-blue-500 rounded-full pt-1">.</span>
                         <span 
-                          :id="'date-count-' + date + '-' + currentMonthInName 
-                          + '-' + currentYear + '-' + new Date(currentYear, currentMonthInNumber, date).toLocaleDateString('default',{weekday: 'long'})" 
+                          :id="'date-count-' + date + '-' + currentMonthInName + '-' + currentYear" 
                           class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">{{this.selectDateCount}}</span>
                       </button>
                     </div>
@@ -160,8 +158,8 @@ export default{
                     <div v-if="toggleLimitation" class="w-full">
                       <ul  class="list-none p-0">
                         <li  v-for="(time, index) in timeSlotArray" :key="index" class="mb-3 flex space-x-1 "> 
-                          <label :id= "'timeSlotLabel-'+index" :data-index-label = index @click="toggleSelect(index)" class="transition-all flex justify-center items-center text-md font-semibold cursor-pointer border-2 text-center  py-3 rounded-md ease-in-out duration-700 w-full border-blue-500 timeSlotLabel  hover:border-3 hover:border-black"
-                          >{{time}}
+                          <label :id= "'timeSlotLabel-'+index" :data-select = time.status :data-index-label = index @click="toggleSelect(index)" class="transition-all flex justify-center items-center text-md font-semibold cursor-pointer border-2 text-center  py-3 rounded-md ease-in-out duration-700 w-full border-blue-500 timeSlotLabel  hover:border-3 hover:border-black"
+                          >{{time.time}}
                           </label>
                           <button :id= "'timeSlotBtn-'+index" :data-index-Select = index @click="pushTimeSLot(time,index)" class="timeSlotBtn transition-all cursor-pointer border-none text-white text-center bg-blue-600 py-3 rounded-md duration-700 ease-in-out font-semibold w-0"
                           >Select
@@ -215,25 +213,187 @@ export default {
       confirmPopup:false,
       hideAfterTimeSelect:true,
       timeSlotArray: [
-        '1:00 AM','1:15 AM','1:30 AM','1:45 AM','2:00 AM',
-        '2:15 AM','2:30 AM','2:45 AM','3:00 AM','3:15 AM',
-        '3:30 AM','3:45 AM','4:00 AM','4:15 AM','4:30 AM',
-        '4:45 AM','5:00 AM','5:15 AM','5:30 AM','5:45 AM',
-        '6:00 AM','6:15 AM','6:30 AM','6:45 AM','7:00 AM',
-        '7:15 AM','7:30 AM','7:45 AM','8:00 AM','8:15 AM',
-        '8:30 AM','8:45 AM','9:00 AM','9:15 AM','9:30 AM',
-        '9:45 AM','10:00 AM','10:15 AM','10:30 AM','10:45 AM',
-        '11:00 AM','11:15 AM','11:30 AM','11:45 AM',
-        '12:00 PM','12:15 PM','12:30 PM','12:45 PM',
-        '1:00 PM','1:15 PM','1:30 PM','1:45 PM','2:00 PM',
-        '2:15 PM','2:30 PM','2:45 PM','3:00 PM','3:15 PM',
-        '3:30 PM','3:45 PM','4:00 PM','4:15 PM','4:30 PM',
-        '4:45 PM','5:00 PM','5:15 PM','5:30 PM','5:45 PM',
-        '6:00 PM','6:15 PM','6:30 PM','6:45 PM','7:00 PM',
-        '7:15 PM','7:30 PM','7:45 PM','8:00 PM','8:15 PM',
-        '8:30 PM','8:45 PM','9:00 PM','9:15 PM','9:30 PM',
-        '9:45 PM','10:00 PM','10:15 PM','10:30 PM','10:45 PM',
-        '11:00 PM','11:15 PM','11:30 PM','11:45 PM','12:00 AM',
+        {
+          status : 'un-selected' ,
+          time: '1:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '1:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '1:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '1:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '2:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '2:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '2:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '2:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '3:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '3:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '3:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '3:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '4:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '4:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '4:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '4:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '5:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '5:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '5:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '5:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '6:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '6:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '6:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '6:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '7:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '7:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '7:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '7:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '8:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '8:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '8:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '8:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '9:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '9:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '9:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '9:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '10:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '10:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '10:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '10:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '11:00 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '11:15 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '11:30 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '11:45 AM'
+        },
+        {
+          status : 'un-selected' ,
+          time: '12:00 PM'
+        },
+        
       ],
       selectedTimeArray:[],
       toggleSelectedTimeSlot:false,
@@ -280,10 +440,13 @@ export default {
 
       /*selected date style*/
       let btn = document.querySelector('[selected-date]');
-      console.log(btn.classList)
-      btn.classList.add('border-2')
-      btn.classList.add('border-blue-800');
+      if(btn !== undefined && btn !== null ){
+        btn.classList.add('border-2')
+        btn.classList.add('border-blue-800');
+      }
       /*selected date style end*/
+
+
     },
     prev() {
       if(this.currentMonthInNumber===0){
@@ -298,16 +461,29 @@ export default {
       // console.log(this.currentMonthInNumber);
     },
     getDateManually(date){
+        /*Remove todays date style*/
+        let toDate = document.querySelector('.todays-date-style');
+        let toDateDot = document.querySelector('.custom-dot-index');
+        if(toDate !== undefined && toDate !== null){
+          toDate.classList.remove('todays-date-style');
+        }
+        if(toDateDot !== undefined && toDateDot !== null){
+          toDateDot.classList.remove('bg-blue-500');
+          toDateDot.classList.remove('custom-dot-index');
+        }
+        /*Remove todays date style end */
+
         /*Remove previous active dates*/
         if(this.previousDateElement !== undefined && this.previousDateElement.length > 0){
           for (let index = 0; index < this.previousDateElement.length; index++) {
             if(!this.previousDateElement[index].dateElement.hasAttribute('selected-date')){
-              this.previousDateElement[index].dateElement.classList.remove('custom-date-style');
-              this.previousDateElement[index].dateElement.classList.remove('bg-blue-500');
-              this.previousDateElement[index].dateElement.classList.remove('text-white');
-              this.previousDateElement[index].dateElement.classList.add('text-blue-500');
-              this.previousDateElement[index].dateElement.classList.add('hover:bg-slate-200');
-              this.previousDateElement[index].dateElement.classList.add('bg-slate-100');
+              // this.previousDateElement[index].dateElement.classList.remove('custom-date-style');
+              // this.previousDateElement[index].dateElement.classList.remove('bg-blue-500');
+              // this.previousDateElement[index].dateElement.classList.remove('text-white');
+              // this.previousDateElement[index].dateElement.classList.add('text-blue-500');
+              // this.previousDateElement[index].dateElement.classList.add('hover:bg-slate-200');
+              // this.previousDateElement[index].dateElement.classList.add('bg-slate-100');
+              this.previousDateElement[index].dateElement.classList.remove('active-date')
             }
           }
           this.previousDateElement = [];
@@ -316,14 +492,15 @@ export default {
   
         /*make active selected date*/
         let dayName = new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString('default',{weekday: 'long'});
-        let id = 'date-label-' + date + '-' + this.currentMonthInName + '-' + this.currentYear + '-' + dayName;
+        let id = 'date-label-' + date + '-' + this.currentMonthInName + '-' + this.currentYear;
         let dateElement = document.getElementById(id);
-        dateElement.classList.remove('text-blue-500');
-        dateElement.classList.remove('bg-slate-100');
-        dateElement.classList.remove('hover:bg-slate-200');
-        dateElement.classList.add('custom-date-style');
-        dateElement.classList.add('bg-blue-500');
-        dateElement.classList.add('text-white');
+        // dateElement.classList.remove('text-blue-500');
+        // dateElement.classList.remove('bg-slate-100');
+        // dateElement.classList.remove('hover:bg-slate-200');
+        // dateElement.classList.add('custom-date-style');
+        // dateElement.classList.add('bg-blue-500');
+        // dateElement.classList.add('text-white');
+        dateElement.classList.add('active-date')
         this.previousDateElement.push({dayName,dateElement});
         /*make active selected date*/
   
@@ -386,7 +563,7 @@ export default {
         month: this.currentMonthInName,
         date: this.currentDate,
         year: this.currentYear,
-        appointedTime: time,
+        appointedTime: time.time,
         dayName:new Date(this.currentYear, this.currentMonthInNumber, this.currentDate).toLocaleDateString('default',{weekday: 'long'}),
         createdAt: newDate.getDate() + "/"
                 + (newDate.getMonth()+1)  + "/" 
@@ -397,7 +574,7 @@ export default {
       }
       if(this.selectedTimeArray.length < 3){
         /*Change selected date style*/
-        let parentLabelId = 'date-label-' + this.currentDate + '-' + this.currentMonthInName + '-' + this.currentYear + '-' + new Date(this.currentYear, this.currentMonthInNumber, this.currentDate).toLocaleDateString('default',{weekday: 'long'});
+        let parentLabelId = 'date-label-' + this.currentDate + '-' + this.currentMonthInName + '-' + this.currentYear;
         let date_label = document.getElementById(parentLabelId);
         date_label.setAttribute('selected-date','selected');
         date_label.classList.add('bg-blue-600');
@@ -419,6 +596,15 @@ export default {
 
         this.selectedTimeArray.push(timeSlotobject);
 
+        /*Change Selected date status*/ 
+        this.timeSlotArray.forEach((obj)=>{
+          if(obj.time == timeSlotobject.appointedTime){
+            obj.status = 'selected';
+            console.log(obj)
+          }
+        })
+        /*Change Selected date status end*/ 
+
         if(this.selectedTimeArray.length === 3){
           this.toggleLimitation = false;
         }
@@ -429,7 +615,7 @@ export default {
     deleteTimeSlot(index){
       this.selectedTimeArray.forEach((value,key)=>{
         if(key === index){
-          let id  = 'date-label-'+value.date+'-'+value.month+'-'+value.year+'-'+value.dayName;
+          let id  = 'date-label-'+value.date+'-'+value.month+'-'+value.year;
           let element = document.getElementById(id);
           if(this.selectDateCount === 1){
             // this.selectDateCount --;
@@ -442,6 +628,7 @@ export default {
             element.classList.remove('text-white');
             element.classList.add('bg-slate-100');
             element.classList.add('text-blue-500');
+            this.selectDateCount = 1;
           }
           else if(this.selectDateCount === 2 || this.selectDateCount === 3){
             this.selectDateCount --;
@@ -533,4 +720,26 @@ export default {
   width: 14.28%;
 }
 
+/* // '1:00 AM','1:15 AM','1:30 AM','1:45 AM','2:00 AM',
+        // '2:15 AM','2:30 AM','2:45 AM','3:00 AM','3:15 AM',
+        // '3:30 AM','3:45 AM','4:00 AM','4:15 AM','4:30 AM',
+        // '4:45 AM','5:00 AM','5:15 AM','5:30 AM','5:45 AM',
+        // '6:00 AM','6:15 AM','6:30 AM','6:45 AM','7:00 AM',
+        // '7:15 AM','7:30 AM','7:45 AM','8:00 AM','8:15 AM',
+        // '8:30 AM','8:45 AM','9:00 AM','9:15 AM','9:30 AM',
+        // '9:45 AM','10:00 AM','10:15 AM','10:30 AM','10:45 AM',
+        // '11:00 AM','11:15 AM','11:30 AM','11:45 AM',
+        // '12:00 PM','12:15 PM','12:30 PM','12:45 PM',
+        // '1:00 PM','1:15 PM','1:30 PM','1:45 PM','2:00 PM',
+        // '2:15 PM','2:30 PM','2:45 PM','3:00 PM','3:15 PM',
+        // '3:30 PM','3:45 PM','4:00 PM','4:15 PM','4:30 PM',
+        // '4:45 PM','5:00 PM','5:15 PM','5:30 PM','5:45 PM',
+        // '6:00 PM','6:15 PM','6:30 PM','6:45 PM','7:00 PM',
+        // '7:15 PM','7:30 PM','7:45 PM','8:00 PM','8:15 PM',
+        // '8:30 PM','8:45 PM','9:00 PM','9:15 PM','9:30 PM',
+        // '9:45 PM','10:00 PM','10:15 PM','10:30 PM','10:45 PM',
+        // '11:00 PM','11:15 PM','11:30 PM','11:45 PM','12:00 AM', */
+
 </style>
+
+

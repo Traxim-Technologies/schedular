@@ -23,3 +23,27 @@
 .time-list-scroller::-webkit-scrollbar-thumb:hover {
     background: #555; 
 }
+
+.past {
+    color: #adadad;
+}
+
+.todays-date-style{
+    color:white !important;
+    z-index: 1;
+    position: relative;
+}
+
+.custom-dot-index{
+    z-index: -1;
+}
+
+.active-date{
+    --tw-bg-opacity: 1;
+    background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+    color: white;
+}
+
+.active-date:hover{
+    background-color: rgb(59 130 246 / var(--tw-bg-opacity)) !important;
+}
