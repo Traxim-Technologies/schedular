@@ -75,16 +75,24 @@ export default{
             <h2 class="text-2xl font-bold color-black mb-4 mt-5">
               Selected Times
             </h2>
-            <div v-for="(selectedTime, index) in selectedTimeArray" :key="index"  class="border p-2 flex items-center justify-between">
+            <div v-for="(selectedTime, index) in selectedTimeArray" :key="index"
+              class="border p-2 flex items-center justify-between">
               <div class="flex items-center gap-4">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1" stroke="white" class="w-6 h-6 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" stroke-width="1"
+                  stroke="white" class="w-6 h-6 text-gray-500">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
                 <div class="">
-                  <h2 class="text-gray-700">{{selectedTime.month}} {{ selectedTime.date}} {{selectedTime.year}}, {{selectedTime.appointedTime}}</h2>
+                  <h2 class="text-gray-700">{{ selectedTime.month }} {{ selectedTime.date }} {{ selectedTime.year }},
+                    {{ selectedTime.appointedTime }}</h2>
                   <span class="text-sm text-gray-500  font-medium">Created at : 12-08-2022 22:45:22</span>
                 </div>
               </div>
-              <svg v-if="hideAfterTimeSelect" @click="deleteTimeSlot(index)" xmlns="http://www.w3.org/2000/svg" fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6 cursor-pointer">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+              <svg v-if="hideAfterTimeSelect" @click="deleteTimeSlot(index,selectedTime.date,selectedTime.month,selectedTime.year)" xmlns="http://www.w3.org/2000/svg"
+                fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6 cursor-pointer">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
               </svg>
             </div>
           </div>
@@ -103,12 +111,20 @@ export default{
                     <h3 class="font-bold text-lg  ">{{ currentMonthInName }} {{ currentYear }}</h3>
                   </div>
                   <div class="flex">
-                    <button @click="prev" class="w-7 h-7 rounded-md mr-2 flex justify-center items-center bg-gray-200 hover:bg-sky-300 hover:text-white ">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
-            
+                    <button @click="prev"
+                      class="w-7 h-7 rounded-md mr-2 flex justify-center items-center bg-gray-200 hover:bg-sky-300 hover:text-white ">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                      </svg>
+
                     </button>
-                    <button @click="next" class="w-7 h-7 rounded-md  flex justify-center items-center bg-gray-200 hover:bg-sky-300 hover:text-white ">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+                    <button @click="next"
+                      class="w-7 h-7 rounded-md  flex justify-center items-center bg-gray-200 hover:bg-sky-300 hover:text-white ">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -119,31 +135,35 @@ export default{
                     </div>
                   </div>
                   <div class="date flex flex-wrap ">
-                    <div class="w-2/12 flex justify-center items-center mb-2 " v-for="day in startDay()" :key="day"></div>
-                    <div class="w-2/12 text-center flex justify-center items-center  mb-4 relative"  
-                      v-for="date in daysInMonth(currentYear, currentMonthInNumber)"
-                      :key="date" ref="date" @click="getDateManually(date)">
-                      <button 
-                        :class="{
-                                  'todays-date-style relative': ((today.getDate() === date) && (today.getMonth() === currentMonthInNumber) && (today.getFullYear() === currentYear)),
-                                  'past text-gray-400': (is_past(today,currentYear,currentMonthInNumber,date,this)? true: false),
-                                  'text-black': is_firstOrLastDay(date) ? true : false,
-                                  'text-blue-500 font-black': is_otherDays(today,currentYear,currentMonthInNumber,date) ? true : false,
-                                }
-                                " 
+                    <div class="w-2/12 flex justify-center items-center mb-2 " v-for="day in startDay()" :key="day">
+                    </div>
+                    <div class="w-2/12 text-center flex justify-center items-center  mb-4 relative"
+                      v-for="date in daysInMonth(currentYear, currentMonthInNumber)" :key="date" ref="date"
+                      @click="getDateManually(date, currentYear, currentMonthInNumber)">
+                      <button
+                      :data-date-value = "date + '-' + currentMonthInNumber + '-' + currentYear" 
+                      :class="{
+                        'todays-date-style relative': ((today.getDate() === date) && (today.getMonth() === currentMonthInNumber) && (today.getFullYear() === currentYear)),
+                        'past text-gray-400': (is_past(today, currentYear, currentMonthInNumber, date, this) ? true : false),
+                        'text-black': is_firstOrLastDay(date) ? true : false,
+                        'text-blue-500 font-black': is_otherDays(today, currentYear, currentMonthInNumber, date) ? true : false,
+                        'is-selected': isSelected(date, currentYear, currentMonthInNumber ) ? true : false
+                      }
+                      "
                         :disabled="(today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf() || is_firstOrLastDay(date) ? true : false)"
-                        :id="'date-label-' + date + '-' + currentMonthInName + '-' + currentYear" 
-                        class="p-2 text-base hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center"> 
+                        :id="'date-label-' + date + '-' + currentMonthInNumber + '-' + currentYear"
+                        class="p-2 text-base hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center">
                         {{ date }}
-                        <span 
-                        :class="
-                        date == todaysDate && 
-                        currentMonthInNumber == todaysMonth && 
-                        currentYear == todaysYear?'block custom-dot-index':'hidden'" 
-                        class="absolute text-4xl font-black h-full w-full bg-blue-500 rounded-full pt-1">.</span>
-                        <span 
-                          :id="'date-count-' + date + '-' + currentMonthInName + '-' + currentYear" 
-                          class="absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white dark:border-gray-900 hidden">{{this.selectDateCount}}</span>
+                        <span :class="
+                      date == todaysDate &&
+                        currentMonthInNumber == todaysMonth &&
+                        currentYear == todaysYear ? 'block custom-dot-index' : 'hidden'"
+                          class="absolute text-4xl font-black h-full w-full bg-blue-500 rounded-full pt-1">.</span>
+                        <input
+                          :data-date-value = "date + '-' + currentMonthInNumber + '-' + currentYear" 
+                          :id="'date-count-' + date + '-' + currentMonthInNumber + '-' + currentYear"
+                          type="text" :value="0"
+                          class="absolute text-center p-0 -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white hidden count-selected-date" />
                       </button>
                     </div>
                   </div>
@@ -152,23 +172,34 @@ export default{
               <div class="w-5/12">
                 <div v-if="timeSlotMain" class="border w-full">
                   <div class="py-2 px-4 border-b-2 mb-4  border-gray-100">
-                    <p class="text-lg font-bold text-center">{{selectedDay}}, {{ currentMonthInName }} {{currentDate}}</p>
+                    <p class="text-lg font-bold text-center">{{ selectedDay }}, {{ currentMonthInName }} {{ currentDate }}
+                    </p>
                   </div>
                   <div class="time-list-scroller px-4 w-full overflow-y-scroll overflow-x-hidden md:h-80 h-full">
                     <div v-if="toggleLimitation" class="w-full">
-                      <ul  class="list-none p-0">
-                        <li  v-for="(time, index) in timeSlotArray" :key="index" class="mb-3 flex space-x-1 "> 
-                          <label :id= "'timeSlotLabel-'+index" :data-select = time.status :data-index-label = index @click="toggleSelect(index)" class="transition-all flex justify-center items-center text-md font-semibold cursor-pointer border-2 text-center  py-3 rounded-md ease-in-out duration-700 w-full border-blue-500 timeSlotLabel  hover:border-3 hover:border-black"
-                          >{{time.time}}
+                      <ul class="list-none p-0">
+                        <li v-for="(time, index) in timeSlotArray" :key="index" class="mb-3 flex space-x-1 ">
+                          <label :id="'timeSlotLabel-' + index" :data-select=time.status :data-index-label=index
+                          :class="{
+                              'already-selected': isTimeSelected(time,selectedDay,currentMonthInNumber,currentDate) ? true : false
+                            }"
+                            @click="toggleSelect(index)"
+                            class="transition-all flex justify-center items-center text-md font-semibold cursor-pointer border-2 text-center  py-3 rounded-md ease-in-out duration-700 w-full border-blue-500 timeSlotLabel  hover:border-3 hover:border-black">{{ time.time }}
                           </label>
-                          <button :id= "'timeSlotBtn-'+index" :data-index-Select = index @click="pushTimeSLot(time,index)" class="timeSlotBtn transition-all cursor-pointer border-none text-white text-center bg-blue-600 py-3 rounded-md duration-700 ease-in-out font-semibold w-0"
-                          >Select
+                          <button
+                            :class="{
+                              'disabled-btn': time.status === true
+                            }" 
+                            :id="'timeSlotBtn-' + index" :data-index-Select=index
+                            @click="pushTimeSLot(time, index, currentMonthInNumber, currentYear, currentDate)"
+                            class="timeSlotBtn transition-all cursor-pointer border-none text-white text-center bg-blue-600 py-3 rounded-md duration-700 ease-in-out font-semibold w-0">Select
                           </button>
                         </li>
                       </ul>
                     </div>
                     <div v-if="!toggleLimitation" class="font-semibold text-xs p-2 flex flex-grow h-full items-center">
-                      You have reached the maximum selected time for the appointment. You can add new time after delete one of the selected ones.
+                      You have reached the maximum selected time for the appointment. You can add new time after delete
+                      one of the selected ones.
                     </div>
                   </div>
                 </div>
@@ -178,21 +209,24 @@ export default{
         </div>
         <div v-if="toggleConfirmBtn" class="flex grow items-end">
           <div class="flex w-full border-t  justify-end">
-            <button @click="confirmPopup = true" class="justify-self-center m-4 justify-center items-center bg-black hover:bg-gray-900 text-white font-bold py-4 px-6 rounded">Confirm</button>
+            <button @click="confirmPopup = true"
+              class="justify-self-center m-4 justify-center items-center bg-black hover:bg-gray-900 text-white font-bold py-4 px-6 rounded">Confirm</button>
           </div>
         </div>
       </div>
     </div>
-    
+
   </div>
 
-  <div  v-if="confirmPopup" class="h-full w-full flex items-center justify-center">
+  <div v-if="confirmPopup" class="h-full w-full flex items-center justify-center">
     <div @click="confirmPopup = false" class="bg-black bg-opacity-75 h-full w-full absolute inset-0"></div>
     <div class="max-w-[400px] h-fit m-auto flex items-center justify-center absolute inset-0">
       <div class="bg-white w-full p-4 rounded-lg text-center">
-        <p class="mb-4 font-bold text-gray-700">Are you sure about the suggested times for this patient? You cannot change it again.</p>
-        <button @click="hideAfterTimeSelect = false,confirmPopup= false" class="bg-black px-4 py-2 text-white text-sm mr-4 rounded-md">Yes Confirm</button>
-        <button @click="confirmPopup= false" class="bg-gray-400 px-4 py-2 text-white text-sm rounded-md">Cancel</button>
+        <p class="mb-4 font-bold text-gray-700">Are you sure about the suggested times for this patient? You cannot
+          change it again.</p>
+        <button @click="hideAfterTimeSelect = false, confirmPopup = false"
+          class="bg-black px-4 py-2 text-white text-sm mr-4 rounded-md">Yes Confirm</button>
+        <button @click="confirmPopup = false" class="bg-gray-400 px-4 py-2 text-white text-sm rounded-md">Cancel</button>
       </div>
     </div>
   </div>
@@ -200,212 +234,258 @@ export default{
 
 <script>
 export default {
-  event:'ViewCalender',
+  event: 'ViewCalender',
   data() {
     return {
       currentMonthInNumber: new Date().getMonth(),
       currentYear: new Date().getFullYear(),
       days: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
       currentDate: null,
-      toggleSelectBtn:false,
-      selectedDay:'',
+      toggleSelectBtn: false,
+      selectedDay: '',
       timeSlotMain: false,
-      confirmPopup:false,
-      hideAfterTimeSelect:true,
+      confirmPopup: false,
+      hideAfterTimeSelect: true,
       timeSlotArray: [
         {
-          status : 'un-selected' ,
-          time: '1:00 AM'
+          status: 'un-selected',
+          time: '1:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '1:15 AM'
+          status: 'un-selected',
+          time: '1:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '1:30 AM'
+          status: 'un-selected',
+          time: '1:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '1:45 AM'
+          status: 'un-selected',
+          time: '1:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '2:00 AM'
+          status: 'un-selected',
+          time: '2:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '2:15 AM'
+          status: 'un-selected',
+          time: '2:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '2:30 AM'
+          status: 'un-selected',
+          time: '2:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '2:45 AM'
+          status: 'un-selected',
+          time: '2:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '3:00 AM'
+          status: 'un-selected',
+          time: '3:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '3:15 AM'
+          status: 'un-selected',
+          time: '3:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '3:30 AM'
+          status: 'un-selected',
+          time: '3:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '3:45 AM'
+          status: 'un-selected',
+          time: '3:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '4:00 AM'
+          status: 'un-selected',
+          time: '4:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '4:15 AM'
+          status: 'un-selected',
+          time: '4:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '4:30 AM'
+          status: 'un-selected',
+          time: '4:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '4:45 AM'
+          status: 'un-selected',
+          time: '4:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '5:00 AM'
+          status: 'un-selected',
+          time: '5:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '5:15 AM'
+          status: 'un-selected',
+          time: '5:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '5:30 AM'
+          status: 'un-selected',
+          time: '5:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '5:45 AM'
+          status: 'un-selected',
+          time: '5:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '6:00 AM'
+          status: 'un-selected',
+          time: '6:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '6:15 AM'
+          status: 'un-selected',
+          time: '6:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '6:30 AM'
+          status: 'un-selected',
+          time: '6:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '6:45 AM'
+          status: 'un-selected',
+          time: '6:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '7:00 AM'
+          status: 'un-selected',
+          time: '7:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '7:15 AM'
+          status: 'un-selected',
+          time: '7:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '7:30 AM'
+          status: 'un-selected',
+          time: '7:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '7:45 AM'
+          status: 'un-selected',
+          time: '7:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '8:00 AM'
+          status: 'un-selected',
+          time: '8:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '8:15 AM'
+          status: 'un-selected',
+          time: '8:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '8:30 AM'
+          status: 'un-selected',
+          time: '8:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '8:45 AM'
+          status: 'un-selected',
+          time: '8:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '9:00 AM'
+          status: 'un-selected',
+          time: '9:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '9:15 AM'
+          status: 'un-selected',
+          time: '9:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '9:30 AM'
+          status: 'un-selected',
+          time: '9:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '9:45 AM'
+          status: 'un-selected',
+          time: '9:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '10:00 AM'
+          status: 'un-selected',
+          time: '10:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '10:15 AM'
+          status: 'un-selected',
+          time: '10:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '10:30 AM'
+          status: 'un-selected',
+          time: '10:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '10:45 AM'
+          status: 'un-selected',
+          time: '10:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '11:00 AM'
+          status: 'un-selected',
+          time: '11:00 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '11:15 AM'
+          status: 'un-selected',
+          time: '11:15 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '11:30 AM'
+          status: 'un-selected',
+          time: '11:30 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '11:45 AM'
+          status: 'un-selected',
+          time: '11:45 AM',
+          fullDate:[]
         },
         {
-          status : 'un-selected' ,
-          time: '12:00 PM'
+          status: 'un-selected',
+          time: '12:00 PM',
+          fullDate:[]
         },
-        
+
       ],
-      selectedTimeArray:[],
-      toggleSelectedTimeSlot:false,
-      toggleConfirmBtn:false,
-      toggleLimitation:true,
-      todaysDate:new Date().getDate(),
-      todaysMonth:new Date().getMonth(),
-      todaysYear:new Date().getFullYear(),
+      selectedTimeArray: [],
+      toggleSelectedTimeSlot: false,
+      toggleConfirmBtn: false,
+      toggleLimitation: true,
+      todaysDate: new Date().getDate(),
+      todaysMonth: new Date().getMonth(),
+      todaysYear: new Date().getFullYear(),
       previousDateElement: [],
-      today:new Date(),
-      selectDateCount:1,
-      prevDateElementId:'',
+      today: new Date(),
+      selectDateCount: 0,
+      prevDateElementId: '',
+      saveSelectedDatesId: [],
     };
   },
   methods: {
@@ -416,102 +496,121 @@ export default {
       return new Date(this.currentYear, this.currentMonthInNumber, 1).getDay();
     },
     next() {
-      if(this.currentMonthInNumber===11){
+
+      if (this.currentMonthInNumber === 11) {
         this.currentYear++
-        this.currentMonthInNumber=0
-      }else{
+        this.currentMonthInNumber = 0
+      } else {
         this.currentMonthInNumber++;
       }
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
 
-      /*selected count*/
-      let elements = document.querySelectorAll('.selected-date-count');
-      for (let index = 0; index < elements.length; index++) {
-        if(elements[index].id === this.prevDateElementId){
-          elements[index].classList.add('flex');
-        }
-        else{
-          elements[index].classList.remove('flex');
-          elements[index].classList.add('hidden');
-        }
-      }
-      /*selected count end*/
-
       /*selected date style*/
       let btn = document.querySelector('[selected-date]');
-      if(btn !== undefined && btn !== null ){
+      if (btn !== undefined && btn !== null) {
         btn.classList.add('border-2')
         btn.classList.add('border-blue-800');
       }
       /*selected date style end*/
 
+      /* Check if element already selected*/
+      let a = document.getElementsByClassName('count-selected-date');
+      for (let i = 0; i < a.length; i++) {
+        a[i].classList.replace('flex', 'hidden');
+      }
+
+      this.saveSelectedDatesId.forEach((id, index) => {
+        let eleCount = document.getElementById(id);
+        if (eleCount !== undefined && eleCount !== null) {
+          console.log(eleCount)
+          let a = document.getElementsByClassName('count-selected-date');
+          for (let i = 0; i < a.length; i++) {
+            if (a[i].id == eleCount.id) {
+              let newId = id.replace('date-label','date-count')
+              document.getElementById(newId).classList.replace('hidden', 'flex');
+            } else {
+              a[i].classList.replace('flex', 'hidden');
+            }
+          }
+        }
+      })
+      /* Check if element already selected End*/
+
 
     },
     prev() {
-      if(this.currentMonthInNumber===0){
+      if (this.currentMonthInNumber === 0) {
         this.currentYear--;
-        this.currentMonthInNumber=11
+        this.currentMonthInNumber = 11
       }
-      else{
+      else {
         this.currentMonthInNumber--;
       }
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
       // console.log(this.currentMonthInNumber);
-    },
-    getDateManually(date){
-        /*Remove todays date style*/
-        let toDate = document.querySelector('.todays-date-style');
-        let toDateDot = document.querySelector('.custom-dot-index');
-        if(toDate !== undefined && toDate !== null){
-          toDate.classList.remove('todays-date-style');
-        }
-        if(toDateDot !== undefined && toDateDot !== null){
-          toDateDot.classList.remove('bg-blue-500');
-          toDateDot.classList.remove('custom-dot-index');
-        }
-        /*Remove todays date style end */
 
-        /*Remove previous active dates*/
-        if(this.previousDateElement !== undefined && this.previousDateElement.length > 0){
-          for (let index = 0; index < this.previousDateElement.length; index++) {
-            if(!this.previousDateElement[index].dateElement.hasAttribute('selected-date')){
-              // this.previousDateElement[index].dateElement.classList.remove('custom-date-style');
-              // this.previousDateElement[index].dateElement.classList.remove('bg-blue-500');
-              // this.previousDateElement[index].dateElement.classList.remove('text-white');
-              // this.previousDateElement[index].dateElement.classList.add('text-blue-500');
-              // this.previousDateElement[index].dateElement.classList.add('hover:bg-slate-200');
-              // this.previousDateElement[index].dateElement.classList.add('bg-slate-100');
-              this.previousDateElement[index].dateElement.classList.remove('active-date')
+      /* Check if element already selected*/
+      this.saveSelectedDatesId.forEach((id, index) => {
+        let eleCount = document.getElementById(id);
+        if (eleCount !== undefined && eleCount !== null) {
+          console.log(eleCount)
+          let a = document.getElementsByClassName('count-selected-date');
+          for (let i = 0; i < a.length; i++) {
+            if (a[i].id == eleCount.id) {
+              let newId = id.replace('date-label','date-count')
+              document.getElementById(newId).classList.replace('hidden', 'flex');
+            } else {
+              a[i].classList.replace('flex', 'hidden');
             }
           }
-          this.previousDateElement = [];
         }
-        /*Remove previous active dates*/
-  
-        /*make active selected date*/
-        let dayName = new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString('default',{weekday: 'long'});
-        let id = 'date-label-' + date + '-' + this.currentMonthInName + '-' + this.currentYear;
-        let dateElement = document.getElementById(id);
-        // dateElement.classList.remove('text-blue-500');
-        // dateElement.classList.remove('bg-slate-100');
-        // dateElement.classList.remove('hover:bg-slate-200');
-        // dateElement.classList.add('custom-date-style');
-        // dateElement.classList.add('bg-blue-500');
-        // dateElement.classList.add('text-white');
-        dateElement.classList.add('active-date')
-        this.previousDateElement.push({dayName,dateElement});
-        /*make active selected date*/
-  
-        this.currentDate = date
-        var date = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
-        this.selectedDay = date.toLocaleDateString('default', { weekday: 'long' });
-        this.timeSlotMain = true;
-        return
-      // console.log(key,this.$refs.date)
+      })
+      /* Check if element already selected End*/
     },
-    toggleSelect(index){
+    getDateManually(date, year, month) {
+      /*Remove todays date style*/
+      let toDate = document.querySelector('.todays-date-style');
+      let toDateDot = document.querySelector('.custom-dot-index');
+      if (toDate !== undefined && toDate !== null) {
+        toDate.classList.remove('todays-date-style');
+      }
+      if (toDateDot !== undefined && toDateDot !== null) {
+        toDateDot.classList.remove('bg-blue-500');
+        toDateDot.classList.remove('custom-dot-index');
+      }
+      /*Remove todays date style end */
+
+      /*Remove previous active dates*/
+      if (this.previousDateElement !== undefined && this.previousDateElement.length > 0) {
+        for (let index = 0; index < this.previousDateElement.length; index++) {
+          this.previousDateElement[index].dateElement.classList.remove('active-date');
+        }
+        this.previousDateElement = [];
+      }
+      /*Remove previous active dates*/
+
+      /*make active selected date*/
+      let dayName = new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString('default', { weekday: 'long' });
+      let id = 'date-label-' + date + '-' + month + '-' + year;
+      let dateElement = document.getElementById(id);
+      dateElement.classList.add('active-date')
+      this.previousDateElement.push({ dayName, dateElement });
+      /*make active selected date*/
+
+      this.currentDate = date
+      var date = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
+      this.selectedDay = date.toLocaleDateString('default', { weekday: 'long' });
+
+      /*Refresh time slots div*/
+      this.timeSlotMain = false;
+      setTimeout(()=>{
+        this.timeSlotMain = true;
+      },500)
+      /*Refresh time slots end*/
+    },
+    toggleSelect(index) {
       let labelArray = document.getElementsByClassName('timeSlotLabel');
       let selectBtnArray = document.getElementsByClassName('timeSlotBtn');
       for (let index = 0; index < selectBtnArray.length; index++) {
@@ -524,7 +623,7 @@ export default {
         /*select class toggles*/
         selectBtnArray[index].classList.add('w-0');
         selectBtnArray[index].classList.remove('w-[50%]');
-        if(labelArray[index].classList.contains('selected-time')){
+        if (labelArray[index].classList.contains('selected-time')) {
           labelArray[index].classList.remove('border-blue-500');
           labelArray[index].classList.add('border-black');
         }
@@ -541,16 +640,16 @@ export default {
       selectBtn.classList.remove('w-0');
       selectBtn.classList.add('w-[50%]');
     },
-    pushTimeSLot(time,index){
+    pushTimeSLot(time, index, month, year, date) {
       /*Select button disabling*/
       let selectBtn = document.getElementById('timeSlotBtn-' + index);
       selectBtn.classList.remove('bg-blue-600');
       selectBtn.classList.add('bg-black');
       selectBtn.classList.add('cursor-not-allowed');
-      selectBtn.setAttribute('disabled','disabled');
+      selectBtn.setAttribute('disabled', 'disabled');
       selectBtn.innerText = 'Selected';
       /*Select button disabling*/
-      
+
       /*Select label to make active*/
       let label = document.getElementById('timeSlotLabel-' + index);
       label.classList.add('selected-time');
@@ -558,92 +657,128 @@ export default {
 
       this.toggleSelectedTimeSlot = true;
       this.toggleConfirmBtn = true;
-      var newDate = new Date(); 
+      var newDate = new Date();
       let timeSlotobject = {
-        month: this.currentMonthInName,
-        date: this.currentDate,
-        year: this.currentYear,
+        month: new Date(year, month).toLocaleString("default", { month: "long" }),
+        monthInNum: month,
+        date: date,
+        year: year,
         appointedTime: time.time,
-        dayName:new Date(this.currentYear, this.currentMonthInNumber, this.currentDate).toLocaleDateString('default',{weekday: 'long'}),
+        dayName: new Date(year, month, date).toLocaleDateString('default', { weekday: 'long' }),
         createdAt: newDate.getDate() + "/"
-                + (newDate.getMonth()+1)  + "/" 
-                + newDate.getFullYear() + " @ "  
-                + newDate.getHours() + ":"  
-                + newDate.getMinutes() + ":" 
-                + newDate.getSeconds(),
+          + (newDate.getMonth() + 1) + "/"
+          + newDate.getFullYear() + " @ "
+          + newDate.getHours() + ":"
+          + newDate.getMinutes() + ":"
+          + newDate.getSeconds(),
       }
-      if(this.selectedTimeArray.length < 3){
-        /*Change selected date style*/
-        let parentLabelId = 'date-label-' + this.currentDate + '-' + this.currentMonthInName + '-' + this.currentYear;
-        let date_label = document.getElementById(parentLabelId);
-        date_label.setAttribute('selected-date','selected');
-        date_label.classList.add('bg-blue-600');
-        date_label.classList.add('border-2');
-        date_label.classList.add('border-blue-800');
-        date_label.classList.add('text-white');
-        date_label.classList.remove('hover:bg-slate-200');
-        /*Change selected date style*/
-        
-        /*Show selected date count*/
-        if(this.prevDateElementId === parentLabelId){
-          this.selectDateCount++;
-        }else{
-          this.selectDateCount = 1;
+
+      /*Updating time slot array */
+      this.timeSlotArray.forEach((val,key)=>{
+        if(val.time == time.time){
+          let data = {
+            date : date,
+            month : new Date(year, month).toLocaleString("default", { month: "long" }),
+            year : year,
+          }
+          val.fullDate.push(data);
+          val.status = 'selected';
         }
-        date_label.childNodes[2].classList.remove('hidden');
-        date_label.childNodes[2].classList.add('flex');
+      })
+
+      /*Updating time slot array*/
+
+      if (this.selectedTimeArray.length < 3) {
+        /*Change selected date style*/
+        let LabelId = 'date-label-' + date + '-' + month + '-' + year;
+        let InputId = 'date-count-' + date + '-' + month + '-' + year;
+
+        this.checkAndSaveId(date, month, year);
+
+        let date_label = document.getElementById(LabelId);
+        let date_input = document.getElementById(InputId);
+
+        date_label.setAttribute('selected-date', 'selected');
+        date_label.classList.add('active-date')
+        date_label.classList.add('border-blue-800')
+        date_label.classList.add('border-2')
+        /*Change selected date style*/
+
+        /*Show selected date count*/
+        if (date_label.getAttribute('data-date-value') === date_input.getAttribute('data-date-value')) {
+          date_input.value++;
+        } 
+        else {
+          date_input.value = 1;
+        }
+        date_input.classList.replace('hidden', 'flex');
         /*Show selected date count*/
 
         this.selectedTimeArray.push(timeSlotobject);
 
-        /*Change Selected date status*/ 
-        this.timeSlotArray.forEach((obj)=>{
-          if(obj.time == timeSlotobject.appointedTime){
-            obj.status = 'selected';
-            console.log(obj)
-          }
-        })
-        /*Change Selected date status end*/ 
-
-        if(this.selectedTimeArray.length === 3){
+        if (this.selectedTimeArray.length === 3) {
           this.toggleLimitation = false;
         }
 
-        this.prevDateElementId = parentLabelId;
+        this.prevDateElementId = LabelId;
       }
     },
-    deleteTimeSlot(index){
-      this.selectedTimeArray.forEach((value,key)=>{
-        if(key === index){
-          let id  = 'date-label-'+value.date+'-'+value.month+'-'+value.year;
-          let element = document.getElementById(id);
-          if(this.selectDateCount === 1){
-            // this.selectDateCount --;
-            element.childNodes[2].classList.remove('flex');
-            element.childNodes[2].classList.add('hidden');
-            element.classList.remove('border-2');
-            element.classList.remove('border-blue-800');
-            element.classList.remove('bg-blue-600');
-            element.classList.remove('bg-blue-500');
-            element.classList.remove('text-white');
-            element.classList.add('bg-slate-100');
-            element.classList.add('text-blue-500');
-            this.selectDateCount = 1;
+    checkAndSaveId(date, month, year) {
+      let LabelId = 'date-label-' + date + '-' + month + '-' + year;
+      this.saveSelectedDatesId.push(LabelId);
+      console.log(this.saveSelectedDatesId)
+    },
+    deleteTimeSlot(index,date,month,year) {
+      console.log(date,month,year)
+      this.selectedTimeArray.forEach((value, key) => {
+        if (key === index) {
+          let labelId = 'date-label-' + value.date + '-' + value.monthInNum + '-' + value.year;
+          let countId = 'date-count-' + value.date + '-' + value.monthInNum + '-' + value.year;
+          let elementLabel = document.getElementById(labelId);
+          let elementCount = document.getElementById(countId);
+
+          /*Remove saved Id*/
+          this.saveSelectedDatesId.forEach((val,key)=>{
+            if(val === labelId){
+              this.saveSelectedDatesId.splice(key,1);
+              console.log(this.saveSelectedDatesId);
+            }
+          })
+          /*Remove saved Id end*/
+
+          /*Remove Saved fullDate*/
+          this.timeSlotArray.forEach((data,index)=>{
+            data.fullDate.forEach((value,key)=>{
+              if(value.date == date && value.month == month && value.year == year){
+                data.fullDate.splice(key,1);
+                console.log(this.timeSlotArray[index])
+              }
+            })
+          })
+            
+          /*Remove Saved fullDate End*/
+
+          if (elementCount.value == 1) {
+            elementCount.classList.replace('flex', 'hidden');
+            elementLabel.classList.remove('border-2');
+            elementLabel.classList.remove('border-blue-800');
+            elementLabel.classList.remove('active-date')
+            elementCount.value = 0;
           }
-          else if(this.selectDateCount === 2 || this.selectDateCount === 3){
-            this.selectDateCount --;
+          else if (elementCount.value == 2 || elementCount.value == 3) {
+            elementCount.value--;
           }
-          if(this.selectedTimeArray.length >= 1){
-            this.selectedTimeArray.splice(index,1);
-            if(this.selectedTimeArray.length < 3){
+          if (this.selectedTimeArray.length >= 1) {
+            this.selectedTimeArray.splice(index, 1);
+            if (this.selectedTimeArray.length < 3) {
               this.toggleLimitation = true;
             }
-            if(this.selectedTimeArray.length === 0 ){
+            if (this.selectedTimeArray.length === 0) {
               this.toggleSelectedTimeSlot = false;
               this.toggleConfirmBtn = false;
             }
           }
-          else{
+          else {
             this.toggleSelectedTimeSlot = false;
             this.toggleConfirmBtn = false;
           }
@@ -651,7 +786,7 @@ export default {
           /*find ele*/
           let selectedTimeElements = document.querySelectorAll('.selected-time');
           for (let index = 0; index < selectedTimeElements.length; index++) {
-            if(value.appointedTime === selectedTimeElements[index].innerText){
+            if (value.appointedTime === selectedTimeElements[index].innerText) {
               /*selected time label class toggles*/
               selectedTimeElements[index].classList.add('w-full');
               selectedTimeElements[index].classList.add('border-blue-500');
@@ -669,47 +804,59 @@ export default {
               selectedTimeElements[index].nextElementSibling.classList.remove('cursor-not-allowed');
               selectedTimeElements[index].nextElementSibling.removeAttribute('disabled');
             }
-          } 
+          }
         }
       })
     },
-    is_past(today, currentYear, currentMonthInNumber, date){
-      if(today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf()){
+    is_past(today, currentYear, currentMonthInNumber, date) {
+      if (today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf()) {
         return true;
       }
     },
-    is_firstOrLastDay(date){
+    is_firstOrLastDay(date) {
       var satOrSun = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
-      const checkDay  = satOrSun.toLocaleDateString('default', { weekday: 'long' });
-      if(checkDay === 'Sunday' || checkDay === 'Saturday'){
+      const checkDay = satOrSun.toLocaleDateString('default', { weekday: 'long' });
+      if (checkDay === 'Sunday' || checkDay === 'Saturday') {
         return true;
       }
     },
-    is_otherDays(today, currentYear, currentMonthInNumber, date){
-      if(today.valueOf() <= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf()){
+    is_otherDays(today, currentYear, currentMonthInNumber, date) {
+      if (today.valueOf() <= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf()) {
         var otherDays = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
-        const checkDay  = otherDays.toLocaleDateString('default', { weekday: 'long' });
-        if(
+        const checkDay = otherDays.toLocaleDateString('default', { weekday: 'long' });
+        if (
           checkDay === 'Monday' || checkDay === 'Tuesday' ||
           checkDay === 'Wednesday' || checkDay === 'Thursday' ||
           checkDay === 'Friday'
-        ){
+        ) {
           return true;
         }
       }
     },
-    disableButton(){
+    disableButton() {
       let allPastDates = document.querySelectorAll('.past');
       for (let index = 0; index < allPastDates.length; index++) {
-        if(allPastDates[index].classList.contains('past')){
-          allPastDates[index].setAttribute('disabled','disabled') 
+        if (allPastDates[index].classList.contains('past')) {
+          allPastDates[index].setAttribute('disabled', 'disabled')
         }
       }
+    },
+    isSelected(date, year, month) {
+      this.selectedTimeArray.forEach((val, index) => {
+        if (val.date == date && val.year == year) {
+          return true;
+        }else{
+          return false;
+        }
+      })
+    },
+    isTimeSelected(time,date,month,year){
+      // console.log(time,date,month,year)
     }
   },
-  computed:{
-    currentMonthInName(){
-      return new Date(this.currentYear,this.currentMonthInNumber).toLocaleString("default", {month: "long"})
+  computed: {
+    currentMonthInName() {
+      return new Date(this.currentYear, this.currentMonthInNumber).toLocaleString("default", { month: "long" })
     },
   },
 };
@@ -739,7 +886,6 @@ export default {
         // '8:30 PM','8:45 PM','9:00 PM','9:15 PM','9:30 PM',
         // '9:45 PM','10:00 PM','10:15 PM','10:30 PM','10:45 PM',
         // '11:00 PM','11:15 PM','11:30 PM','11:45 PM','12:00 AM', */
-
 </style>
 
 
