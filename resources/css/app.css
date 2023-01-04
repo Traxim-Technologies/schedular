@@ -47,3 +47,11 @@
 .active-date:hover{
     background-color: rgb(59 130 246 / var(--tw-bg-opacity)) !important;
 }
+
+.already-selected {
+    border: 2px solid;
+}
+
+.show-selected-count{
+    display: flex !important;
+}

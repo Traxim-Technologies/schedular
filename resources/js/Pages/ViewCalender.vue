@@ -148,22 +148,26 @@ export default{
                         'text-black': is_firstOrLastDay(date) ? true : false,
                         'text-blue-500 font-black': is_otherDays(today, currentYear, currentMonthInNumber, date) ? true : false,
                         'is-selected': isSelected(date, currentYear, currentMonthInNumber ) ? true : false
-                      }
+                        }
                       "
                         :disabled="(today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf() || is_firstOrLastDay(date) ? true : false)"
                         :id="'date-label-' + date + '-' + currentMonthInNumber + '-' + currentYear"
                         class="p-2 text-base hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center">
                         {{ date }}
                         <span :class="
-                      date == todaysDate &&
-                        currentMonthInNumber == todaysMonth &&
-                        currentYear == todaysYear ? 'block custom-dot-index' : 'hidden'"
+                          date == todaysDate &&
+                          currentMonthInNumber == todaysMonth &&
+                          currentYear == todaysYear ? 'block custom-dot-index' : 'hidden'"
                           class="absolute text-4xl font-black h-full w-full bg-blue-500 rounded-full pt-1">.</span>
                         <input
+                          :class="{
+                            'flex': isTimeSelectedCount(currentDate,currentMonthInName,currentYear) === true,
+                            'hidden': isTimeSelectedCount(currentDate,currentMonthInName,currentYear) === false,
+                          }"
                           :data-date-value = "date + '-' + currentMonthInNumber + '-' + currentYear" 
                           :id="'date-count-' + date + '-' + currentMonthInNumber + '-' + currentYear"
                           type="text" :value="0"
-                          class="absolute text-center p-0 -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white hidden count-selected-date" />
+                          class="absolute text-center p-0 -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white count-selected-date" />
                       </button>
                     </div>
                   </div>
@@ -181,18 +185,20 @@ export default{
                         <li v-for="(time, index) in timeSlotArray" :key="index" class="mb-3 flex space-x-1 ">
                           <label :id="'timeSlotLabel-' + index" :data-select=time.status :data-index-label=index
                           :class="{
-                              'already-selected': isTimeSelected(time,selectedDay,currentMonthInNumber,currentDate) ? true : false
+                              'already-selected': isTimeSelected(time,currentDate,currentMonthInName,currentYear) ? true : false
                             }"
                             @click="toggleSelect(index)"
                             class="transition-all flex justify-center items-center text-md font-semibold cursor-pointer border-2 text-center  py-3 rounded-md ease-in-out duration-700 w-full border-blue-500 timeSlotLabel  hover:border-3 hover:border-black">{{ time.time }}
                           </label>
                           <button
                             :class="{
-                              'disabled-btn': time.status === true
-                            }" 
+                              'already-button-selected bg-black': isTimeSelected(time,currentDate,currentMonthInName,currentYear) === true,
+                              'bg-blue-600': isTimeSelected(time,currentDate,currentMonthInName,currentYear) === false,
+                            }"
+                            :disabled="isTimeSelected(time,currentDate,currentMonthInName,currentYear) ? true : false"
                             :id="'timeSlotBtn-' + index" :data-index-Select=index
                             @click="pushTimeSLot(time, index, currentMonthInNumber, currentYear, currentDate)"
-                            class="timeSlotBtn transition-all cursor-pointer border-none text-white text-center bg-blue-600 py-3 rounded-md duration-700 ease-in-out font-semibold w-0">Select
+                            class="timeSlotBtn transition-all cursor-pointer border-none text-white text-center  py-3 rounded-md duration-700 ease-in-out font-semibold w-0">Select
                           </button>
                         </li>
                       </ul>
@@ -537,7 +543,6 @@ export default {
       })
       /* Check if element already selected End*/
 
-
     },
     prev() {
       if (this.currentMonthInNumber === 0) {
@@ -568,6 +573,7 @@ export default {
         }
       })
       /* Check if element already selected End*/
+
     },
     getDateManually(date, year, month) {
       /*Remove todays date style*/
@@ -615,45 +621,40 @@ export default {
       let selectBtnArray = document.getElementsByClassName('timeSlotBtn');
       for (let index = 0; index < selectBtnArray.length; index++) {
         /*label class toggles*/
-        labelArray[index].classList.add('w-full');
         labelArray[index].classList.add('border-blue-500');
         labelArray[index].classList.remove('bg-gray-600');
         labelArray[index].classList.remove('text-white');
-        labelArray[index].classList.remove('w-[50%]');
+        labelArray[index].classList.replace('w-[50%]','w-full');
         /*select class toggles*/
-        selectBtnArray[index].classList.add('w-0');
-        selectBtnArray[index].classList.remove('w-[50%]');
+        selectBtnArray[index].classList.replace('w-[50%]','w-0');
         if (labelArray[index].classList.contains('selected-time')) {
-          labelArray[index].classList.remove('border-blue-500');
-          labelArray[index].classList.add('border-black');
+          labelArray[index].classList.replace('border-blue-500','border-black');
         }
       }
       let label = document.getElementById('timeSlotLabel-' + index);
       let selectBtn = document.getElementById('timeSlotBtn-' + index);
       /*label class toggles*/
-      label.classList.remove('w-full');
+      label.classList.replace('w-full','w-[50%]');
       label.classList.remove('border-blue-500');
       label.classList.add('bg-gray-600');
       label.classList.add('text-white');
-      label.classList.add('w-[50%]');
       /*select class toggles*/
-      selectBtn.classList.remove('w-0');
-      selectBtn.classList.add('w-[50%]');
+      selectBtn.classList.replace('w-0','w-[50%]');
     },
     pushTimeSLot(time, index, month, year, date) {
       /*Select button disabling*/
       let selectBtn = document.getElementById('timeSlotBtn-' + index);
-      selectBtn.classList.remove('bg-blue-600');
-      selectBtn.classList.add('bg-black');
+      selectBtn.classList.replace('bg-blue-600','bg-black');
+      selectBtn.classList.replace('w-[50%]','w-0');
       selectBtn.classList.add('cursor-not-allowed');
       selectBtn.setAttribute('disabled', 'disabled');
       selectBtn.innerText = 'Selected';
       /*Select button disabling*/
 
-      /*Select label to make active*/
+      /*Select label to make selective*/
       let label = document.getElementById('timeSlotLabel-' + index);
-      label.classList.add('selected-time');
-      /*Select label to make active*/
+      label.classList.add('border-black')
+      /*Select label to make selective*/
 
       this.toggleSelectedTimeSlot = true;
       this.toggleConfirmBtn = true;
@@ -685,7 +686,6 @@ export default {
           val.status = 'selected';
         }
       })
-
       /*Updating time slot array*/
 
       if (this.selectedTimeArray.length < 3) {
@@ -729,7 +729,6 @@ export default {
       console.log(this.saveSelectedDatesId)
     },
     deleteTimeSlot(index,date,month,year) {
-      console.log(date,month,year)
       this.selectedTimeArray.forEach((value, key) => {
         if (key === index) {
           let labelId = 'date-label-' + value.date + '-' + value.monthInNum + '-' + value.year;
@@ -788,19 +787,15 @@ export default {
           for (let index = 0; index < selectedTimeElements.length; index++) {
             if (value.appointedTime === selectedTimeElements[index].innerText) {
               /*selected time label class toggles*/
-              selectedTimeElements[index].classList.add('w-full');
-              selectedTimeElements[index].classList.add('border-blue-500');
+              selectedTimeElements[index].classList.replace('w-[50%]','w-full');
+              selectedTimeElements[index].classList.replace('border-black','border-blue-500');
               selectedTimeElements[index].classList.remove('bg-gray-600');
               selectedTimeElements[index].classList.remove('text-white');
-              selectedTimeElements[index].classList.remove('w-[50%]');
-              selectedTimeElements[index].classList.remove('border-black');
               selectedTimeElements[index].classList.remove('selected-time')
 
               /*selecteted time label (select) button class toggles*/
-              selectedTimeElements[index].nextElementSibling.classList.add('w-0');
-              selectedTimeElements[index].nextElementSibling.classList.add('bg-blue-600');
-              selectedTimeElements[index].nextElementSibling.classList.remove('w-[50%]');
-              selectedTimeElements[index].nextElementSibling.classList.remove('bg-black');
+              selectedTimeElements[index].nextElementSibling.classList.replace('w-[50%]','w-0');
+              selectedTimeElements[index].nextElementSibling.classList.replace('bg-black','bg-blue-600');
               selectedTimeElements[index].nextElementSibling.classList.remove('cursor-not-allowed');
               selectedTimeElements[index].nextElementSibling.removeAttribute('disabled');
             }
@@ -851,7 +846,28 @@ export default {
       })
     },
     isTimeSelected(time,date,month,year){
-      // console.log(time,date,month,year)
+      let check = false
+      if(time.fullDate.length > 0){
+        time.fullDate.forEach((data,key)=>{
+          if(data.date == date && data.month == month && data.year == year){
+            check = true;
+          }
+        })
+      }
+      return check;
+    },
+    isTimeSelectedCount(date,month,year){
+      let check = false
+      this.timeSlotArray.forEach((value,key)=>{
+        if(value.fullDate.length > 0){
+          value.fullDate.forEach((data,key)=>{
+            if(data.date == date && data.month == month && data.year == year){
+              check = true;
+            }
+          })
+        }
+      })
+      return check;
     }
   },
   computed: {
