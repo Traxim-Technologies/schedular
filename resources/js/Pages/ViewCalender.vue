@@ -89,7 +89,7 @@ export default{
                   <span class="text-sm text-gray-500  font-medium">Created at : 12-08-2022 22:45:22</span>
                 </div>
               </div>
-              <svg v-if="hideAfterTimeSelect" @click="deleteTimeSlot(index,selectedTime.date,selectedTime.month,selectedTime.year)" xmlns="http://www.w3.org/2000/svg"
+              <svg v-if="hideAfterTimeSelect" @click="deleteTimeSlot(index,selectedTime.time,selectedTime.date,selectedTime.month,selectedTime.year)" xmlns="http://www.w3.org/2000/svg"
                 fill="red" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6 cursor-pointer">
                 <path stroke-linecap="round" stroke-linejoin="round"
                   d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
@@ -147,7 +147,7 @@ export default{
                         'past text-gray-400': (is_past(today, currentYear, currentMonthInNumber, date, this) ? true : false),
                         'text-black': is_firstOrLastDay(date) ? true : false,
                         'text-blue-500 font-black': is_otherDays(today, currentYear, currentMonthInNumber, date) ? true : false,
-                        'is-selected': isSelected(date, currentYear, currentMonthInNumber ) ? true : false
+                        'is-selected border-2 border-blue-800': isSelected(date, currentYear, currentMonthInNumber ) ? true : false
                         }
                       "
                         :disabled="(today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf() || is_firstOrLastDay(date) ? true : false)"
@@ -161,13 +161,13 @@ export default{
                           class="absolute text-4xl font-black h-full w-full bg-blue-500 rounded-full pt-1">.</span>
                         <input
                           :class="{
-                            'flex': isTimeSelectedCount(currentDate,currentMonthInName,currentYear) === true,
-                            'hidden': isTimeSelectedCount(currentDate,currentMonthInName,currentYear) === false,
+                            'flex count-selected-date': isSelected(date,currentMonthInName,currentYear) === true,
+                            'hidden': isSelected(date,currentMonthInName,currentYear) === false,
                           }"
                           :data-date-value = "date + '-' + currentMonthInNumber + '-' + currentYear" 
                           :id="'date-count-' + date + '-' + currentMonthInNumber + '-' + currentYear"
                           type="text" :value="0"
-                          class="absolute text-center p-0 -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white count-selected-date" />
+                          class="absolute text-center p-0 -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white " />
                       </button>
                     </div>
                   </div>
@@ -521,26 +521,7 @@ export default {
       /*selected date style end*/
 
       /* Check if element already selected*/
-      let a = document.getElementsByClassName('count-selected-date');
-      for (let i = 0; i < a.length; i++) {
-        a[i].classList.replace('flex', 'hidden');
-      }
-
-      this.saveSelectedDatesId.forEach((id, index) => {
-        let eleCount = document.getElementById(id);
-        if (eleCount !== undefined && eleCount !== null) {
-          console.log(eleCount)
-          let a = document.getElementsByClassName('count-selected-date');
-          for (let i = 0; i < a.length; i++) {
-            if (a[i].id == eleCount.id) {
-              let newId = id.replace('date-label','date-count')
-              document.getElementById(newId).classList.replace('hidden', 'flex');
-            } else {
-              a[i].classList.replace('flex', 'hidden');
-            }
-          }
-        }
-      })
+      
       /* Check if element already selected End*/
 
     },
@@ -660,6 +641,7 @@ export default {
       this.toggleConfirmBtn = true;
       var newDate = new Date();
       let timeSlotobject = {
+        time:time.time,
         month: new Date(year, month).toLocaleString("default", { month: "long" }),
         monthInNum: month,
         date: date,
@@ -711,7 +693,6 @@ export default {
         else {
           date_input.value = 1;
         }
-        date_input.classList.replace('hidden', 'flex');
         /*Show selected date count*/
 
         this.selectedTimeArray.push(timeSlotobject);
@@ -726,9 +707,8 @@ export default {
     checkAndSaveId(date, month, year) {
       let LabelId = 'date-label-' + date + '-' + month + '-' + year;
       this.saveSelectedDatesId.push(LabelId);
-      console.log(this.saveSelectedDatesId)
     },
-    deleteTimeSlot(index,date,month,year) {
+    deleteTimeSlot(index,time,date,month,year) {
       this.selectedTimeArray.forEach((value, key) => {
         if (key === index) {
           let labelId = 'date-label-' + value.date + '-' + value.monthInNum + '-' + value.year;
@@ -747,14 +727,17 @@ export default {
 
           /*Remove Saved fullDate*/
           this.timeSlotArray.forEach((data,index)=>{
-            data.fullDate.forEach((value,key)=>{
-              if(value.date == date && value.month == month && value.year == year){
-                data.fullDate.splice(key,1);
-                console.log(this.timeSlotArray[index])
-              }
-            })
+            if(data.time == time){
+              data.fullDate.forEach((value,key)=>{
+                if(value.date == date && value.month == month && value.year == year){
+                  data.fullDate.splice(key,1);
+                  if(data.fullDate.length == 0 ){
+                    data.status = 'un-selected';
+                  }
+                }
+              })
+            }
           })
-            
           /*Remove Saved fullDate End*/
 
           if (elementCount.value == 1) {
@@ -836,15 +819,6 @@ export default {
         }
       }
     },
-    isSelected(date, year, month) {
-      this.selectedTimeArray.forEach((val, index) => {
-        if (val.date == date && val.year == year) {
-          return true;
-        }else{
-          return false;
-        }
-      })
-    },
     isTimeSelected(time,date,month,year){
       let check = false
       if(time.fullDate.length > 0){
@@ -856,15 +830,17 @@ export default {
       }
       return check;
     },
-    isTimeSelectedCount(date,month,year){
+    isSelected(date,month,year){
       let check = false
       this.timeSlotArray.forEach((value,key)=>{
-        if(value.fullDate.length > 0){
-          value.fullDate.forEach((data,key)=>{
-            if(data.date == date && data.month == month && data.year == year){
-              check = true;
-            }
-          })
+        if(value.status == 'selected'){
+          if(value.fullDate.length > 0){
+            value.fullDate.forEach((data,key)=>{
+              if(data.date == date && data.month == month && data.year == year){
+                check = true;
+              }
+            })
+          }
         }
       })
       return check;
