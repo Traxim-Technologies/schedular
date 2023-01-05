@@ -11,7 +11,7 @@ export default{
 </script> -->
 
 <template>
-  <div class="h-full 2xl:h-[90vh] flex items-center">
+  <div class="lg:h-[100vh] 2xl:h-[90vh] flex items-center">
     <div
       class="flex width-hg flex-wrap justify-around w-full md:max-w-2xl lg:max-w-7xl rounded-md text-center lg:text-left md:mx-auto">
       <div
