@@ -512,18 +512,6 @@ export default {
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
 
-      /*selected date style*/
-      let btn = document.querySelector('[selected-date]');
-      if (btn !== undefined && btn !== null) {
-        btn.classList.add('border-2')
-        btn.classList.add('border-blue-800');
-      }
-      /*selected date style end*/
-
-      /* Check if element already selected*/
-      
-      /* Check if element already selected End*/
-
     },
     prev() {
       if (this.currentMonthInNumber === 0) {
@@ -535,25 +523,6 @@ export default {
       }
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
-      // console.log(this.currentMonthInNumber);
-
-      /* Check if element already selected*/
-      this.saveSelectedDatesId.forEach((id, index) => {
-        let eleCount = document.getElementById(id);
-        if (eleCount !== undefined && eleCount !== null) {
-          console.log(eleCount)
-          let a = document.getElementsByClassName('count-selected-date');
-          for (let i = 0; i < a.length; i++) {
-            if (a[i].id == eleCount.id) {
-              let newId = id.replace('date-label','date-count')
-              document.getElementById(newId).classList.replace('hidden', 'flex');
-            } else {
-              a[i].classList.replace('flex', 'hidden');
-            }
-          }
-        }
-      })
-      /* Check if element already selected End*/
 
     },
     getDateManually(date, year, month) {
@@ -680,7 +649,8 @@ export default {
         let date_label = document.getElementById(LabelId);
         let date_input = document.getElementById(InputId);
 
-        date_label.setAttribute('selected-date', 'selected');
+        // date_label.setAttribute('selected-date', 'selected');
+        date_label.classList.add('selected-date')
         date_label.classList.add('active-date')
         date_label.classList.add('border-blue-800')
         date_label.classList.add('border-2')
