@@ -160,13 +160,17 @@ export default{
                           currentYear == todaysYear ? 'block custom-dot-index' : 'hidden'"
                           class="absolute text-4xl font-black h-full w-full bg-blue-500 rounded-full pt-1">.</span>
                         <input
+                          ref="Input"
+                          readonly
                           :class="{
                             'flex count-selected-date': isSelected(date,currentMonthInName,currentYear) === true,
                             'hidden': isSelected(date,currentMonthInName,currentYear) === false,
+                            'count-correction' : countCorrection(date,currentMonthInNumber,currentYear) === true
                           }"
+                          :value = "0"   
                           :data-date-value = "date + '-' + currentMonthInNumber + '-' + currentYear" 
                           :id="'date-count-' + date + '-' + currentMonthInNumber + '-' + currentYear"
-                          type="text" :value="0"
+                          type="text"
                           class="absolute text-center p-0 -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-black rounded-full border-2 border-white " />
                       </button>
                     </div>
@@ -492,6 +496,7 @@ export default {
       selectDateCount: 0,
       prevDateElementId: '',
       saveSelectedDatesId: [],
+      saveDeletedSlot:[],
     };
   },
   methods: {
@@ -511,7 +516,7 @@ export default {
       }
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
-
+      
     },
     prev() {
       if (this.currentMonthInNumber === 0) {
@@ -523,7 +528,6 @@ export default {
       }
       this.timeSlotMain = false;
       this.toggleSelectBtn = false;
-
     },
     getDateManually(date, year, month) {
       /*Remove todays date style*/
@@ -710,17 +714,20 @@ export default {
           })
           /*Remove Saved fullDate End*/
 
-          if (elementCount.value == 1) {
-            elementCount.classList.replace('flex', 'hidden');
-            elementLabel.classList.remove('border-2');
-            elementLabel.classList.remove('border-blue-800');
-            elementLabel.classList.remove('active-date')
-            elementCount.value = 0;
-          }
-          else if (elementCount.value == 2 || elementCount.value == 3) {
-            elementCount.value--;
-          }
+          // if (elementCount.value == 1) {
+          //   elementCount.classList.replace('flex', 'hidden');
+          //   elementLabel.classList.remove('border-2');
+          //   elementLabel.classList.remove('border-blue-800');
+          //   elementLabel.classList.remove('active-date')
+          //   elementCount.value = 0;
+          // }
+          // else if (elementCount.value == 2 || elementCount.value == 3) {
+          //   elementCount.value--;
+          // }
           if (this.selectedTimeArray.length >= 1) {
+            console.log(value)
+            this.saveDeletedSlot.push(value)
+
             this.selectedTimeArray.splice(index, 1);
             if (this.selectedTimeArray.length < 3) {
               this.toggleLimitation = true;
@@ -734,6 +741,7 @@ export default {
             this.toggleSelectedTimeSlot = false;
             this.toggleConfirmBtn = false;
           }
+
 
           /*find ele*/
           let selectedTimeElements = document.querySelectorAll('.selected-time');
@@ -814,7 +822,28 @@ export default {
         }
       })
       return check;
+    },
+    countCorrection(date,month,year){
+      let check = false
+      this.saveDeletedSlot.forEach((val,key)=>{
+        if(val.date == date && val.monthInNum == month && val.year == year){
+          let arr = this.$refs.Input;
+          if(arr != null && arr != undefined){
+            arr.forEach((val)=>{
+              if(val.classList.contains('count-selected-date')){
+                console.log(val.classList)
+                if(val.value == 3 || val.value == 2){
+                  val.value--;
+                  check = true;
+                }
+              }
+            })
+          }
+        }
+      })
+      return check;
     }
+
   },
   computed: {
     currentMonthInName() {
