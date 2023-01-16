@@ -21,9 +21,9 @@ export default{
             <div class="logo px-8 flex justify-center items-center lg:block mb-4">
               <img src="https://globalcloudportal.ttech.dev/public/img/doc_logo_login.png">
             </div>
-            <h4 class="text-lg font-medium text-gray-500 px-8">
+            <h4 class="text-lg font-black text-gray-500 px-8">
               Dr. Noman Khokhar</h4>
-            <p class="text-lg px-8 font-medium justify-center lg:justify-start text-gray-500 flex  mr-4 lg:mr-0 mb-2">
+            <p class="text-lg px-8 font-black justify-center lg:justify-start text-gray-500 flex  mr-4 lg:mr-0 mb-2">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                 class="w-6 h-6 mt-1 mr-2 text-black">
                 <path fill-rule="evenodd"
@@ -36,7 +36,7 @@ export default{
               Schedule the Patient
             </h2>
             <div class="pt-2 px-8 flex flex-wrap justify-center items-center lg:block">
-              <p class="text-lg font-medium text-gray-500 flex items-center mr-4 lg:mr-0 mb-2">
+              <p class="text-lg font-black text-gray-500 flex items-center mr-4 lg:mr-0 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                   class="w-5 h-5 mr-2 text-black">
                   <path fill-rule="evenodd"
@@ -45,7 +45,7 @@ export default{
                 </svg>
                 Jennifer Patient
               </p>
-              <p class="text-lg font-medium text-gray-500 flex items-center mr-4 lg:mr-0 mb-2">
+              <p class="text-lg font-black text-gray-500 flex items-center mr-4 lg:mr-0 mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                   class="w-5 h-5 mr-2 text-black">
                   <path fill-rule="evenodd"
@@ -55,7 +55,7 @@ export default{
 
                 (888) 888-8888
               </p>
-              <p class="text-lg font-medium text-gray-500 flex items-center mb-2">
+              <p class="text-lg font-black text-gray-500 flex items-center mb-2">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                   class="w-5 h-5 mr-2 text-black">
                   <path fill-rule="evenodd"
@@ -64,15 +64,27 @@ export default{
                 </svg>
                 123 Main Steet, Paterson, NJ, USA
               </p>
+              <p class="text-lg font-black text-gray-500 flex items-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 text-black mr-2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+                </svg>
+                Noman Att
+              </p>
+              <p class="text-lg font-black text-gray-500 flex items-center mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mr-2 text-black">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 00.75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 00-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0112 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 01-.673-.38m0 0A2.18 2.18 0 013 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 013.413-.387m7.5 0V5.25A2.25 2.25 0 0013.5 3h-3a2.25 2.25 0 00-2.25 2.25v.894m7.5 0a48.667 48.667 0 00-7.5 0M12 12.75h.008v.008H12v-.008z" />
+                </svg>
+                Noman Case Manager
+              </p>
             </div>
-            <p class=" px-8 mb-4 text-sm text-center lg:text-left mt-4 font-medium border border-dotted">
-
+            <p class="px-8 py-1 text-sm text-center lg:text-left mt-4 font-medium border border-dotted">
+              Description
             </p>
           </div>
         </div>
         <div v-if="toggleSelectedTimeSlot" class="flex items-end border-t w-full">
-          <div class="showSelectedSlot px-4 w-full">
-            <h2 class="text-2xl font-bold color-black mb-4 mt-5">
+          <div class="showSelectedSlot px-8 w-full">
+            <h2 class="text-2xl font-bold color-black mb-2 mt-5">
               Selected Times
             </h2>
             <div v-for="(selectedTime, index) in selectedTimeArray" :key="index"
@@ -111,18 +123,19 @@ export default{
                     <h3 class="font-bold text-lg  ">{{ currentMonthInName }} {{ currentYear }}</h3>
                   </div>
                   <div class="flex">
-                    <button @click="prev"
-                      class="w-7 h-7 rounded-md mr-2 flex justify-center items-center bg-gray-200 hover:bg-sky-300 hover:text-white ">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5">
+                    <button
+                    :disabled="((today.getDate() === date) && (today.getMonth() === currentMonthInNumber) && (today.getFullYear() === currentYear))"
+                     @click="prev"
+                      class="w-8 h-8 rounded-full flex justify-center items-center text-blue-800 hover:bg-blue-100 p-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                        stroke="currentColor" class="w-full h-full">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
                       </svg>
-
                     </button>
                     <button @click="next"
-                      class="w-7 h-7 rounded-md  flex justify-center items-center bg-gray-200 hover:bg-sky-300 hover:text-white ">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                        stroke="currentColor" class="w-5 h-5">
+                      class="w-8 h-8 rounded-full flex justify-center items-center text-blue-800 hover:bg-blue-100 p-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3"
+                        stroke="currentColor" class="w-full h-full">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                       </svg>
                     </button>
@@ -146,13 +159,13 @@ export default{
                         'todays-date-style relative': ((today.getDate() === date) && (today.getMonth() === currentMonthInNumber) && (today.getFullYear() === currentYear)),
                         'past text-gray-400': (is_past(today, currentYear, currentMonthInNumber, date, this) ? true : false),
                         'text-black': is_firstOrLastDay(date) ? true : false,
-                        'text-blue-500 font-black': is_otherDays(today, currentYear, currentMonthInNumber, date) ? true : false,
-                        'is-selected border-2 border-blue-800': isSelected(date, currentYear, currentMonthInNumber ) ? true : false
+                        'text-blue-500 font-black bg-blue-50 hover:bg-blue-100': is_otherDays(today, currentYear, currentMonthInNumber, date) ? true : false,
+                        'border-2 border-blue-800': isSelected(date,currentMonthInName,currentYear) ? true : false
                         }
                       "
                         :disabled="(today.valueOf() >= new Date(currentYear, currentMonthInNumber, date + 1, 0, 0, 0, 0).valueOf() || is_firstOrLastDay(date) ? true : false)"
                         :id="'date-label-' + date + '-' + currentMonthInNumber + '-' + currentYear"
-                        class="p-2 text-base hover:cursor-pointer  bg-slate-100 hover:bg-slate-200 rounded-full w-10 h-10 flex justify-center items-center">
+                        class="p-2 text-base hover:cursor-pointer rounded-full w-10 h-10 flex justify-center items-center">
                         {{ date }}
                         <span :class="
                           date == todaysDate &&
@@ -229,14 +242,14 @@ export default{
   </div>
 
   <div v-if="confirmPopup" class="h-full w-full flex items-center justify-center">
-    <div @click="confirmPopup = false" class="bg-black bg-opacity-75 h-full w-full absolute inset-0"></div>
-    <div class="max-w-[400px] h-fit m-auto flex items-center justify-center absolute inset-0">
+    <div @click="confirmPopup = false" class="bg-black bg-opacity-50 h-full w-full absolute inset-0"></div>
+    <div class="max-w-[450px] h-fit m-auto flex items-center justify-center absolute inset-0 z-20">
       <div class="bg-white w-full p-4 rounded-lg text-center">
-        <p class="mb-4 font-bold text-gray-700">Are you sure about the suggested times for this patient? You cannot
+        <p class="mb-4 font-bold text-gray-700 text-xl">Are you sure about the suggested times for this patient? You cannot
           change it again.</p>
         <button @click="hideAfterTimeSelect = false, confirmPopup = false"
-          class="bg-black px-4 py-2 text-white text-sm mr-4 rounded-md">Yes Confirm</button>
-        <button @click="confirmPopup = false" class="bg-gray-400 px-4 py-2 text-white text-sm rounded-md">Cancel</button>
+          class="bg-black px-4 py-2 text-white text-base mr-4 rounded-md">Yes Confirm</button>
+        <button @click="confirmPopup = false" class="bg-gray-400 px-4 py-2 text-white text-base rounded-md">Cancel</button>
       </div>
     </div>
   </div>
@@ -562,12 +575,12 @@ export default {
       this.currentDate = date
       var date = new Date(new Date(this.currentYear, this.currentMonthInNumber, date).toLocaleDateString());
       this.selectedDay = date.toLocaleDateString('default', { weekday: 'long' });
-
+      this.timeSlotMain = true;
       /*Refresh time slots div*/
-      this.timeSlotMain = false;
-      setTimeout(()=>{
-        this.timeSlotMain = true;
-      },500)
+      // this.timeSlotMain = false;
+      // setTimeout(()=>{
+      //   this.timeSlotMain = true;
+      // },500)
       /*Refresh time slots end*/
     },
     toggleSelect(index) {
@@ -656,8 +669,8 @@ export default {
         // date_label.setAttribute('selected-date', 'selected');
         date_label.classList.add('selected-date')
         date_label.classList.add('active-date')
-        date_label.classList.add('border-blue-800')
-        date_label.classList.add('border-2')
+        // date_label.classList.add('border-blue-800')
+        // date_label.classList.add('border-2')
         /*Change selected date style*/
 
         /*Show selected date count*/
@@ -831,7 +844,7 @@ export default {
           if(arr != null && arr != undefined){
             arr.forEach((val)=>{
               if(val.classList.contains('count-selected-date')){
-                console.log(val.classList)
+                console.log('deleted')
                 if(val.value == 3 || val.value == 2){
                   val.value--;
                   check = true;
